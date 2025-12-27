@@ -1,21 +1,47 @@
 # Railway Deployment Guide for Marhas Admin Dashboard
 
-## 🚀 Quick Deployment
+## 🚀 Deployment Method
 
-### Method 1: Automatic (Recommended)
-Simply push to your connected GitHub repository. Railway will use `railway.toml` and `nixpacks.toml` for configuration.
-
-### Method 2: Manual Configuration
-If automatic detection fails, use these settings:
-
-| Setting | Value |
-|---------|-------|
-| **Build Command** | `npm ci && npm run build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/` |
-| **Start Command** | `node .next/standalone/server.js` |
+This project uses a **custom Dockerfile** for Railway deployment to avoid Nixpacks cache mount issues.
 
 ---
 
-## 🔧 Environment Variables
+## 🔧 Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Multi-stage Docker build |
+| `.dockerignore` | Excludes unnecessary files from build |
+| `railway.toml` | Railway configuration |
+
+---
+
+## 🐳 Dockerfile Architecture
+
+```
+┌─────────────────────────────────────────┐
+│  Stage 1: deps (node:20-alpine)         │
+│  - Installs npm dependencies            │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│  Stage 2: builder (node:20-alpine)      │
+│  - Copies deps from Stage 1             │
+│  - Runs npm build                       │
+│  - Copies static files to standalone    │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│  Stage 3: runner (node:20-alpine)       │
+│  - Minimal production image             │
+│  - Runs as non-root user (nextjs)       │
+│  - Exposes port 3000                    │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 🔑 Environment Variables
 
 Add these in Railway Dashboard → Variables:
 
@@ -29,105 +55,53 @@ NEXT_PUBLIC_API_URL=https://your-backend-api.com/api
 
 ---
 
-## ⚠️ Important: 502 Bad Gateway Fix
+## 🧪 Local Docker Testing
 
-The 502 error is typically caused by **missing static files in standalone build**. This is fixed by our configuration which copies:
-- `public/` → `.next/standalone/public/`
-- `.next/static/` → `.next/standalone/.next/static/`
+Test the Docker build locally:
 
-### Configuration Files
-1. **`railway.toml`** - Railway-specific configuration
-2. **`nixpacks.toml`** - Build phases and dependencies
-3. **`next.config.ts`** - Next.js standalone output mode
-
----
-
-## 🧪 Local Testing
-
-Test the production build locally before deploying:
-
-```powershell
-# Step 1: Build
-npm run build
-
-# Step 2: Copy static files (Windows PowerShell)
-Copy-Item -Path "public" -Destination ".next\standalone\public" -Recurse -Force
-Copy-Item -Path ".next\static" -Destination ".next\standalone\.next\static" -Recurse -Force
-
-# Step 3: Start server
-$env:PORT = "3000"; $env:HOSTNAME = "0.0.0.0"; node .next/standalone/server.js
-```
-
-For Linux/macOS:
 ```bash
-# Build and copy
-npm run build
-cp -r public .next/standalone/
-cp -r .next/static .next/standalone/.next/
+# Build the image
+docker build -t marhas-admin .
 
-# Start server
-PORT=3000 HOSTNAME=0.0.0.0 node .next/standalone/server.js
+# Run the container
+docker run -p 3000:3000 marhas-admin
 ```
 
 ---
 
-## 📊 Health Check
+## ⚠️ Troubleshooting
 
-Railway performs health checks on the `"/"` route. Ensure your homepage returns a 200 status code.
+### Error: EBUSY cache mount
+**Solution**: This is fixed by using custom Dockerfile instead of Nixpacks
 
----
+### Error: 502 Bad Gateway
+**Possible causes**:
+1. Static files not copied to standalone folder
+2. PORT not bound correctly
+3. Application crashes on startup
 
-## 🔍 Troubleshooting
+**Check Railway logs for**:
+- `Ready on http://0.0.0.0:3000`
+- Any startup errors
 
-### Issue: 502 Bad Gateway
-**Cause**: Static files not copied to standalone folder
-**Solution**: Ensure build command includes the `cp` commands
-
-### Issue: Application crashes on start
-**Cause**: Missing environment variables or Node.js version mismatch
-**Solution**: 
-- Check Railway logs for specific errors
-- Ensure `NODE_ENV=production` is set
-- Verify Node.js version is >= 20.9.0
-
-### Issue: Images not loading
-**Cause**: Public folder not in standalone directory
-**Solution**: The `cp -r public .next/standalone/` command should fix this
+### Error: Images not loading
+**Solution**: Ensure `public/` is copied in Dockerfile (already done)
 
 ---
 
-## 📁 Project Structure
+## ✅ Deployment Checklist
 
-```
-├── railway.toml           # Railway deployment config
-├── nixpacks.toml          # Nixpacks build config
-├── next.config.ts         # Next.js config (output: standalone)
-├── package.json           # Dependencies and scripts
-├── public/                # Static assets (copied to standalone)
-├── src/                   # Application source code
-└── .next/
-    ├── standalone/        # Production build
-    │   ├── server.js      # Production server
-    │   ├── public/        # Copied from /public
-    │   └── .next/
-    │       └── static/    # Copied from /.next/static
-    └── static/            # Built static assets
-```
-
----
-
-## ✅ Checklist Before Deploy
-
-- [ ] `npm run build` completes without errors
-- [ ] `railway.toml` exists in project root
-- [ ] `nixpacks.toml` exists in project root
-- [ ] Environment variables are set in Railway
-- [ ] Local production test works (`node .next/standalone/server.js`)
+- [x] `Dockerfile` - Multi-stage build
+- [x] `.dockerignore` - Excludes node_modules, .next, etc.
+- [x] `railway.toml` - Uses DOCKERFILE builder
+- [x] `next.config.ts` - output: "standalone"
+- [ ] Environment variables set in Railway
+- [ ] Health check passes (GET /)
 
 ---
 
 ## 📝 Notes
-- **Node Version**: >= 20.9.0
-- **Standalone Mode**: Enabled in `next.config.ts`
-- **Port**: Automatically uses Railway's `PORT` env variable
-- **Hostname**: Server binds to `0.0.0.0` for external access
+- **Node Version**: 20 (Alpine)
+- **Port**: 3000 (exposed via Dockerfile)
+- **User**: Runs as non-root `nextjs` user for security
+- **Image Size**: Optimized with multi-stage build
