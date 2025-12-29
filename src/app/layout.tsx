@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -16,7 +17,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Marhas Admin Dashboard",
-  description: "Modern EdTech Admin Dashboard for School Management",
+  description: "Dashboard Admin SMK Marhas - Sistem Manajemen Sekolah Terpadu",
 };
 
 export default function RootLayout({
@@ -25,11 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="id">
       <body
         className={`${inter.variable} ${poppins.variable} antialiased`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

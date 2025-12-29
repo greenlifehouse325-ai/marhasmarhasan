@@ -1,37 +1,40 @@
 'use client';
 
-import React from 'react';
-import MainLayout from '@/components/layout/MainLayout';
-import AttendanceOverview from '@/components/dashboard/AttendanceOverview';
-import AIAssistantCard from '@/components/dashboard/AIAssistantCard';
-import QuickActions from '@/components/dashboard/QuickActions';
-import SchoolUpdates from '@/components/dashboard/SchoolUpdates';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { ROLE_CONFIGS } from '@/types/admin';
+import { Loader2 } from 'lucide-react';
 
-export default function Dashboard() {
+export default function RootPage() {
+  const router = useRouter();
+  const { user, isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    // Only redirect when loading is complete to avoid flash
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push('/login');
+      } else if (user) {
+        // Redirect to specific role dashboard based on user role
+        const config = ROLE_CONFIGS[user.role];
+        if (config) {
+          router.push(config.basePath);
+        } else {
+          // Fallback if role config missing
+          router.push('/login');
+        }
+      }
+    }
+  }, [isLoading, isAuthenticated, user, router]);
+
+  // Show loading state while checking auth
   return (
-    <MainLayout
-      activeNav="dashboard"
-      adminName="Admin Rizky"
-      showRightPanel={true}
-    >
-      {/* Dashboard Content */}
-      <div className="flex flex-col gap-6 animate-fadeIn">
-        {/* Hero Section: Attendance + AI Assistant */}
-        <div className="grid grid-cols-3 gap-5">
-          <div className="col-span-2">
-            <AttendanceOverview />
-          </div>
-          <div className="col-span-1">
-            <AIAssistantCard />
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <QuickActions />
-
-        {/* School Updates */}
-        <SchoolUpdates />
+    <div className="min-h-screen bg-[var(--bg-main)] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 size={40} className="text-[#1E4D8C] animate-spin" />
+        <p className="text-gray-500">Memuat...</p>
       </div>
-    </MainLayout>
+    </div>
   );
 }
