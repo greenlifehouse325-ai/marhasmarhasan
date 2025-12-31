@@ -7,7 +7,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
     LayoutDashboard,
@@ -48,11 +48,14 @@ import {
     Bug,
     Upload,
     AlertTriangle,
+    User,
+    ChevronDown,
 } from 'lucide-react';
 import type { AdminRole } from '@/types/auth';
 import { ROLE_CONFIGS } from '@/types/admin';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { DoubleConfirmModal } from '@/components/shared';
 
 // ============================================
 // TYPES
@@ -306,6 +309,8 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
     const { user, logout } = useAuth();
     const roleConfig = ROLE_CONFIGS[role];
     const navSections = NAV_CONFIGS[role];
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
 
     const handleLogout = async () => {
         await logout();
@@ -313,10 +318,8 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
     };
 
     const isActive = (href: string) => {
-        if (href === roleConfig.basePath) {
-            return currentPath === href;
-        }
-        return currentPath.startsWith(href);
+        // Only exact match - no parent route matching
+        return currentPath === href;
     };
 
     return (
@@ -333,10 +336,10 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
             <aside
                 className={`
           fixed left-0 top-0 h-screen w-[280px] lg:w-[260px]
-          bg-white/95 backdrop-blur-xl
+          bg-[var(--bg-sidebar)] backdrop-blur-xl
           flex flex-col py-6 px-4
           shadow-[4px_0_24px_rgba(0,0,0,0.08)]
-          rounded-r-[28px]
+          border-r border-[var(--border-light)]
           z-50
           transition-transform duration-300 ease-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -346,9 +349,9 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
                 {/* Close button - mobile */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors lg:hidden"
+                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-[var(--bg-hover)] hover:bg-[var(--bg-active)] transition-colors lg:hidden"
                 >
-                    <X size={18} className="text-gray-500" />
+                    <X size={18} className="text-[var(--text-muted)]" />
                 </button>
 
                 {/* Logo Header */}
@@ -383,7 +386,7 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
                     {navSections.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="mb-2">
                             {section.title && (
-                                <p className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                <p className="px-4 py-2 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                                     {section.title}
                                 </p>
                             )}
@@ -399,7 +402,7 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
                       transition-all duration-200 group
                       ${active
                                                 ? 'text-white'
-                                                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                                : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'
                                             }
                     `}
                                         style={active ? { backgroundColor: roleConfig.color } : {}}
@@ -410,7 +413,7 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
                         transition-all duration-200
                         ${active
                                                     ? 'bg-white/20 text-white'
-                                                    : 'bg-gray-100 group-hover:bg-gray-200'
+                                                    : 'bg-[var(--bg-hover)] group-hover:bg-[var(--bg-active)]'
                                                 }
                       `}
                                         >
@@ -434,31 +437,73 @@ export default function RoleSidebar({ role, isOpen, onClose, currentPath }: Role
                     ))}
                 </nav>
 
-                {/* User Section */}
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-3 px-3 py-2">
-                        <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-medium text-sm shadow-md"
-                            style={{
-                                background: `linear-gradient(135deg, ${roleConfig.color} 0%, ${roleConfig.color}CC 100%)`
-                            }}
-                        >
-                            {user?.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-800 truncate">{user?.name}</p>
-                            <p className="text-xs text-gray-400">{roleConfig.displayNameId}</p>
-                        </div>
+                {/* User Section with Dropdown */}
+                <div className="mt-4 pt-4 border-t border-[var(--border-light)]">
+                    <div className="relative">
                         <button
-                            onClick={handleLogout}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
-                            title="Logout"
+                            onClick={() => setShowUserMenu(!showUserMenu)}
+                            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-[var(--bg-hover)] transition-colors"
                         >
-                            <LogOut size={18} />
+                            <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-medium text-sm shadow-md"
+                                style={{
+                                    background: `linear-gradient(135deg, ${roleConfig.color} 0%, ${roleConfig.color}CC 100%)`
+                                }}
+                            >
+                                {user?.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                            </div>
+                            <div className="flex-1 min-w-0 text-left">
+                                <p className="text-sm font-medium text-[var(--text-primary)] truncate">{user?.name}</p>
+                                <p className="text-xs text-[var(--text-muted)]">{roleConfig.displayNameId}</p>
+                            </div>
+                            <ChevronDown size={16} className={`text-[var(--text-muted)] transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                         </button>
+
+                        {/* User Dropdown Menu */}
+                        {showUserMenu && (
+                            <div className="absolute bottom-full left-0 right-0 mb-2 bg-[var(--bg-card)] border border-[var(--border-light)] rounded-xl shadow-lg overflow-hidden z-50">
+                                <Link
+                                    href="/profil"
+                                    onClick={() => { setShowUserMenu(false); onClose(); }}
+                                    className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--bg-hover)] transition-colors"
+                                >
+                                    <User size={18} className="text-[var(--text-muted)]" />
+                                    <span className="text-sm font-medium text-[var(--text-primary)]">Profil Saya</span>
+                                </Link>
+                                <Link
+                                    href="/pengaturan"
+                                    onClick={() => { setShowUserMenu(false); onClose(); }}
+                                    className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--bg-hover)] transition-colors"
+                                >
+                                    <Settings size={18} className="text-[var(--text-muted)]" />
+                                    <span className="text-sm font-medium text-[var(--text-primary)]">Pengaturan</span>
+                                </Link>
+                                <div className="border-t border-[var(--border-light)]"></div>
+                                <button
+                                    onClick={() => { setShowUserMenu(false); setShowLogoutModal(true); }}
+                                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-colors"
+                                >
+                                    <LogOut size={18} className="text-red-500" />
+                                    <span className="text-sm font-medium text-red-500">Keluar</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </aside>
+
+            {/* Logout Confirmation Modal */}
+            <DoubleConfirmModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleLogout}
+                title="Keluar dari Akun"
+                message="Anda akan keluar dari dashboard admin. Session Anda akan berakhir."
+                warningMessage="Pastikan semua perubahan sudah tersimpan!"
+                confirmText="Ya, Keluar"
+                cancelText="Batal"
+                cooldownSeconds={3}
+            />
         </>
     );
 }

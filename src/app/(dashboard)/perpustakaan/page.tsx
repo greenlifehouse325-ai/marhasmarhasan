@@ -92,8 +92,8 @@ export default function PerpustakaanDashboard() {
                 {/* Left Column */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Quick Actions */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Aksi Cepat</h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <QuickAction
                                 label="Peminjaman Baru"
@@ -123,9 +123,9 @@ export default function PerpustakaanDashboard() {
                     </div>
 
                     {/* Recent Loans */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-gray-800">Peminjaman Terbaru</h2>
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Peminjaman Terbaru</h2>
                             <Link
                                 href="/perpustakaan/peminjaman"
                                 className="text-sm text-emerald-600 hover:text-emerald-700 flex items-center gap-1"
@@ -137,14 +137,14 @@ export default function PerpustakaanDashboard() {
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-left text-sm text-gray-500 border-b border-gray-100">
+                                    <tr className="text-left text-sm text-[var(--text-muted)] border-b border-[var(--border-light)]">
                                         <th className="pb-3 font-medium">Peminjam</th>
                                         <th className="pb-3 font-medium">Buku</th>
                                         <th className="pb-3 font-medium">Tanggal</th>
                                         <th className="pb-3 font-medium">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-50">
+                                <tbody className="divide-y divide-[var(--border-light)]">
                                     <LoanRow
                                         borrower="Ahmad Rizky"
                                         bookTitle="Pemrograman Web Dasar"
@@ -181,10 +181,10 @@ export default function PerpustakaanDashboard() {
                     </div>
 
                     {/* Circulation Chart Placeholder */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-gray-800">Statistik Sirkulasi</h2>
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Statistik Sirkulasi</h2>
+                            <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                                 <Calendar size={14} />
                                 <span>7 hari terakhir</span>
                             </div>
@@ -199,21 +199,21 @@ export default function PerpustakaanDashboard() {
                                             className="w-full bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-lg transition-all duration-300 hover:from-emerald-600 hover:to-emerald-500"
                                             style={{ height: `${value * 1.8}px` }}
                                         />
-                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs px-2 py-1 rounded">
+                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-light)] text-xs px-2 py-1 rounded shadow-lg">
                                             {value}
                                         </div>
                                     </div>
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs text-[var(--text-muted)]">
                                         {['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'][index]}
                                     </span>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-[var(--border-light)]">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                                <span className="text-xs text-gray-500">Peminjaman</span>
+                                <span className="text-xs text-[var(--text-muted)]">Peminjaman</span>
                             </div>
                         </div>
                     </div>
@@ -222,10 +222,10 @@ export default function PerpustakaanDashboard() {
                 {/* Right Column */}
                 <div className="space-y-6">
                     {/* Overdue Books */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold text-gray-800">Jatuh Tempo</h2>
-                            <span className="text-xs px-2 py-1 bg-amber-100 text-amber-600 rounded-full font-medium">
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Jatuh Tempo</h2>
+                            <span className="text-xs px-2 py-1 bg-amber-500/20 text-amber-500 rounded-full font-medium">
                                 12 buku
                             </span>
                         </div>
@@ -253,15 +253,15 @@ export default function PerpustakaanDashboard() {
 
                         <Link
                             href="/perpustakaan/denda"
-                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
+                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/10 rounded-lg transition-colors"
                         >
                             Lihat Semua Denda <ArrowRight size={14} />
                         </Link>
                     </div>
 
                     {/* Popular Books */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Buku Populer</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Buku Populer</h2>
 
                         <div className="space-y-3">
                             <PopularBook
@@ -293,8 +293,8 @@ export default function PerpustakaanDashboard() {
                     </div>
 
                     {/* Today's Summary */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Hari Ini</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Hari Ini</h2>
 
                         <div className="space-y-4">
                             <SummaryItem
@@ -343,19 +343,19 @@ function StatCard({
     urgent?: boolean;
 }) {
     return (
-        <div className={`bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow ${urgent ? 'ring-2 ring-amber-200' : ''}`}>
+        <div className={`bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow border border-[var(--border-light)] ${urgent ? 'ring-2 ring-amber-400/50' : ''}`}>
             <div className="flex items-start justify-between mb-3">
                 <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: `${color}15`, color }}
+                    style={{ backgroundColor: `${color}20`, color }}
                 >
                     {icon}
                 </div>
                 {urgent && <AlertTriangle size={16} className="text-amber-500" />}
             </div>
-            <p className="text-2xl font-bold text-gray-800">{value}</p>
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className={`text-xs mt-1 ${urgent ? 'text-amber-600' : 'text-gray-400'}`}>{subtext}</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">{value}</p>
+            <p className="text-sm text-[var(--text-secondary)]">{label}</p>
+            <p className={`text-xs mt-1 ${urgent ? 'text-amber-500' : 'text-[var(--text-muted)]'}`}>{subtext}</p>
         </div>
     );
 }
@@ -374,7 +374,7 @@ function QuickAction({
     return (
         <Link
             href={href}
-            className="flex flex-col items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors group"
+            className="flex flex-col items-center gap-3 p-4 rounded-xl bg-[var(--bg-hover)] hover:bg-[var(--bg-active)] transition-colors group"
         >
             <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center text-white transition-transform group-hover:scale-110"
@@ -382,7 +382,7 @@ function QuickAction({
             >
                 {icon}
             </div>
-            <span className="text-sm font-medium text-gray-700 text-center">{label}</span>
+            <span className="text-sm font-medium text-[var(--text-primary)] text-center">{label}</span>
         </Link>
     );
 }
@@ -399,9 +399,9 @@ function LoanRow({
     status: 'active' | 'overdue' | 'returned';
 }) {
     const statusStyles = {
-        active: 'bg-blue-100 text-blue-600',
-        overdue: 'bg-red-100 text-red-600',
-        returned: 'bg-green-100 text-green-600',
+        active: 'bg-blue-500/20 text-blue-500',
+        overdue: 'bg-red-500/20 text-red-500',
+        returned: 'bg-green-500/20 text-green-500',
     };
 
     const statusLabels = {
@@ -411,10 +411,10 @@ function LoanRow({
     };
 
     return (
-        <tr className="hover:bg-gray-50">
-            <td className="py-3 text-sm text-gray-800">{borrower}</td>
-            <td className="py-3 text-sm text-gray-600">{bookTitle}</td>
-            <td className="py-3 text-sm text-gray-400">{date}</td>
+        <tr className="hover:bg-[var(--bg-hover)]">
+            <td className="py-3 text-sm text-[var(--text-primary)]">{borrower}</td>
+            <td className="py-3 text-sm text-[var(--text-secondary)]">{bookTitle}</td>
+            <td className="py-3 text-sm text-[var(--text-muted)]">{date}</td>
             <td className="py-3">
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${statusStyles[status]}`}>
                     {statusLabels[status]}
@@ -436,13 +436,13 @@ function OverdueItem({
     fine: number;
 }) {
     return (
-        <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
+        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
             <div className="flex items-start justify-between mb-1">
-                <p className="text-sm font-medium text-gray-800">{borrower}</p>
-                <span className="text-xs text-amber-600 font-medium">+{daysOverdue} hari</span>
+                <p className="text-sm font-medium text-[var(--text-primary)]">{borrower}</p>
+                <span className="text-xs text-amber-500 font-medium">+{daysOverdue} hari</span>
             </div>
-            <p className="text-xs text-gray-500 mb-2">{bookTitle}</p>
-            <div className="flex items-center gap-1 text-xs text-amber-700">
+            <p className="text-xs text-[var(--text-muted)] mb-2">{bookTitle}</p>
+            <div className="flex items-center gap-1 text-xs text-amber-500">
                 <Banknote size={12} />
                 <span>Denda: Rp {fine.toLocaleString('id-ID')}</span>
             </div>
@@ -470,8 +470,8 @@ function PopularBook({
                 {rank}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-700 truncate">{title}</p>
-                <p className="text-xs text-gray-400">{loans}x dipinjam</p>
+                <p className="text-sm text-[var(--text-primary)] truncate">{title}</p>
+                <p className="text-xs text-[var(--text-muted)]">{loans}x dipinjam</p>
             </div>
         </div>
     );
@@ -493,13 +493,13 @@ function SummaryItem({
             <div className="flex items-center gap-2">
                 <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${color}15`, color }}
+                    style={{ backgroundColor: `${color}20`, color }}
                 >
                     {icon}
                 </div>
-                <span className="text-sm text-gray-600">{label}</span>
+                <span className="text-sm text-[var(--text-secondary)]">{label}</span>
             </div>
-            <span className="text-sm font-semibold text-gray-800">{value}</span>
+            <span className="text-sm font-semibold text-[var(--text-primary)]">{value}</span>
         </div>
     );
 }

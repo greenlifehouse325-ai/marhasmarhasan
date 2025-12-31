@@ -3,6 +3,7 @@
  * SMK Marhas Admin Dashboard
  * 
  * Dashboard untuk Admin Keuangan dengan overview pembayaran dan cashflow
+ * THEME-AWARE VERSION
  */
 
 'use client';
@@ -16,11 +17,9 @@ import {
     AlertTriangle,
     ArrowRight,
     Plus,
-    Search,
     Calendar,
     Users,
     CheckCircle,
-    Clock,
     FileText,
     Bell,
 } from 'lucide-react';
@@ -90,8 +89,8 @@ export default function KeuanganDashboard() {
                 {/* Left Column */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Quick Actions */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Aksi Cepat</h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <QuickAction
                                 label="Verifikasi Pembayaran"
@@ -122,10 +121,10 @@ export default function KeuanganDashboard() {
                     </div>
 
                     {/* Cashflow Chart */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-gray-800">Cashflow</h2>
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Cashflow</h2>
+                            <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                                 <Calendar size={14} />
                                 <span>6 bulan terakhir</span>
                             </div>
@@ -154,29 +153,29 @@ export default function KeuanganDashboard() {
                                             style={{ height: `${month.expense * 1}px` }}
                                         />
                                     </div>
-                                    <span className="absolute -bottom-6 text-xs text-gray-400">
+                                    <span className="absolute -bottom-6 text-xs text-[var(--text-muted)]">
                                         {['Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'][index]}
                                     </span>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="flex items-center justify-center gap-6 mt-8 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-center gap-6 mt-8 pt-4 border-t border-[var(--border-light)]">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                                <span className="text-xs text-gray-500">Pemasukan</span>
+                                <span className="text-xs text-[var(--text-muted)]">Pemasukan</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-red-400" />
-                                <span className="text-xs text-gray-500">Pengeluaran</span>
+                                <span className="text-xs text-[var(--text-muted)]">Pengeluaran</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Recent Transactions */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-gray-800">Transaksi Terakhir</h2>
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Transaksi Terakhir</h2>
                             <Link
                                 href="/keuangan/pemasukan"
                                 className="text-sm text-amber-600 hover:text-amber-700 flex items-center gap-1"
@@ -223,10 +222,10 @@ export default function KeuanganDashboard() {
                 {/* Right Column */}
                 <div className="space-y-6">
                     {/* Pending Payments */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold text-gray-800">Menunggu Verifikasi</h2>
-                            <span className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded-full font-medium">
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Menunggu Verifikasi</h2>
+                            <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-500 rounded-full font-medium">
                                 8 pending
                             </span>
                         </div>
@@ -254,15 +253,15 @@ export default function KeuanganDashboard() {
 
                         <Link
                             href="/keuangan/spp"
-                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors"
+                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 rounded-lg transition-colors"
                         >
                             Lihat Semua <ArrowRight size={14} />
                         </Link>
                     </div>
 
                     {/* Outstanding by Class */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Tunggakan per Kelas</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Tunggakan per Kelas</h2>
 
                         <div className="space-y-3">
                             <OutstandingClass
@@ -289,8 +288,8 @@ export default function KeuanganDashboard() {
                     </div>
 
                     {/* Summary Today */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Hari Ini</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Hari Ini</h2>
 
                         <div className="space-y-4">
                             <SummaryItem
@@ -320,7 +319,7 @@ export default function KeuanganDashboard() {
 }
 
 // ============================================
-// SUB-COMPONENTS
+// SUB-COMPONENTS (THEME-AWARE)
 // ============================================
 
 function StatCard({
@@ -339,19 +338,19 @@ function StatCard({
     positive?: boolean;
 }) {
     return (
-        <div className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow border border-[var(--border-light)]">
             <div className="flex items-start justify-between mb-3">
                 <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: `${color}15`, color }}
+                    style={{ backgroundColor: `${color}20`, color }}
                 >
                     {icon}
                 </div>
                 {positive && <TrendingUp size={14} className="text-green-500" />}
             </div>
-            <p className="text-2xl font-bold text-gray-800">{value}</p>
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className={`text-xs mt-1 ${positive ? 'text-green-600' : 'text-gray-400'}`}>{trend}</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">{value}</p>
+            <p className="text-sm text-[var(--text-secondary)]">{label}</p>
+            <p className={`text-xs mt-1 ${positive ? 'text-green-500' : 'text-[var(--text-muted)]'}`}>{trend}</p>
         </div>
     );
 }
@@ -372,7 +371,7 @@ function QuickAction({
     return (
         <Link
             href={href}
-            className="relative flex flex-col items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors group"
+            className="relative flex flex-col items-center gap-3 p-4 rounded-xl bg-[var(--bg-hover)] hover:bg-[var(--bg-active)] transition-colors group"
         >
             {badge && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-medium bg-red-500 text-white rounded-full">
@@ -385,7 +384,7 @@ function QuickAction({
             >
                 {icon}
             </div>
-            <span className="text-sm font-medium text-gray-700 text-center">{label}</span>
+            <span className="text-sm font-medium text-[var(--text-primary)] text-center">{label}</span>
         </Link>
     );
 }
@@ -402,18 +401,18 @@ function TransactionItem({
     time: string;
 }) {
     return (
-        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-colors">
             <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center ${type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                className={`w-10 h-10 rounded-xl flex items-center justify-center ${type === 'income' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'
                     }`}
             >
                 {type === 'income' ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 truncate">{description}</p>
-                <p className="text-xs text-gray-400">{time}</p>
+                <p className="text-sm text-[var(--text-primary)] truncate">{description}</p>
+                <p className="text-xs text-[var(--text-muted)]">{time}</p>
             </div>
-            <span className={`text-sm font-semibold ${type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+            <span className={`text-sm font-semibold ${type === 'income' ? 'text-green-500' : 'text-red-500'}`}>
                 {type === 'income' ? '+' : '-'}Rp {amount.toLocaleString('id-ID')}
             </span>
         </div>
@@ -432,14 +431,14 @@ function PendingPayment({
     time: string;
 }) {
     return (
-        <div className="p-3 rounded-xl bg-blue-50 border border-blue-100">
+        <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
             <div className="flex items-start justify-between mb-1">
-                <p className="text-sm font-medium text-gray-800">{name}</p>
-                <span className="text-xs text-blue-600">{time}</span>
+                <p className="text-sm font-medium text-[var(--text-primary)]">{name}</p>
+                <span className="text-xs text-blue-500">{time}</span>
             </div>
-            <p className="text-xs text-gray-500 mb-2">{className}</p>
+            <p className="text-xs text-[var(--text-muted)] mb-2">{className}</p>
             <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-gray-800">
+                <span className="text-sm font-semibold text-[var(--text-primary)]">
                     Rp {amount.toLocaleString('id-ID')}
                 </span>
                 <button className="text-xs px-2 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
@@ -460,12 +459,12 @@ function OutstandingClass({
     total: number;
 }) {
     return (
-        <div className="flex items-center justify-between p-3 rounded-xl bg-red-50 border border-red-100">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-red-500/10 border border-red-500/20">
             <div>
-                <p className="text-sm font-medium text-gray-800">{className}</p>
-                <p className="text-xs text-gray-500">{count} siswa menunggak</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">{className}</p>
+                <p className="text-xs text-[var(--text-muted)]">{count} siswa menunggak</p>
             </div>
-            <span className="text-sm font-semibold text-red-600">
+            <span className="text-sm font-semibold text-red-500">
                 Rp {(total / 1000000).toFixed(1)} Jt
             </span>
         </div>
@@ -488,13 +487,13 @@ function SummaryItem({
             <div className="flex items-center gap-2">
                 <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${color}15`, color }}
+                    style={{ backgroundColor: `${color}20`, color }}
                 >
                     {icon}
                 </div>
-                <span className="text-sm text-gray-600">{label}</span>
+                <span className="text-sm text-[var(--text-secondary)]">{label}</span>
             </div>
-            <span className="text-sm font-semibold text-gray-800">{value}</span>
+            <span className="text-sm font-semibold text-[var(--text-primary)]">{value}</span>
         </div>
     );
 }

@@ -1,15 +1,14 @@
 /**
- * Login Page
+ * Login Page - Redesigned
  * SMK Marhas Admin Dashboard
  * 
- * Halaman login dengan split layout:
- * - Kiri: Deskripsi aplikasi + branding
- * - Kanan: Form login
+ * Elegant minimal design with dark mode support
+ * Single brand color scheme for professional look
  */
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     Mail,
@@ -17,21 +16,25 @@ import {
     Eye,
     EyeOff,
     ArrowRight,
-    Shield,
-    BookOpen,
-    Wallet,
-    ClipboardCheck,
-    Calendar,
-    Smartphone,
     AlertCircle,
-    Loader2
+    Loader2,
+    Sparkles
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ROLE_CONFIGS } from '@/types/admin';
+import ThemeToggle from '@/components/shared/ThemeToggle';
 
 export default function LoginPage() {
     const router = useRouter();
-    const { login, isLoading, error } = useAuth();
+    const { login, isLoading, error, isAuthenticated, user } = useAuth();
+
+    // Redirect to dashboard if already authenticated
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            const roleConfig = ROLE_CONFIGS[user.role];
+            router.replace(roleConfig.basePath);
+        }
+    }, [isAuthenticated, user, router]);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -50,10 +53,8 @@ export default function LoginPage() {
 
             if (response.success) {
                 if (response.requiresOTP) {
-                    // Redirect ke halaman OTP verification
                     router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
                 } else if (response.user) {
-                    // Redirect berdasarkan role
                     const roleConfig = ROLE_CONFIGS[response.user.role];
                     router.push(roleConfig.basePath);
                 }
@@ -70,133 +71,130 @@ export default function LoginPage() {
     const displayError = localError || error;
 
     return (
-        <div className="flex w-full min-h-screen">
-            {/* Left Panel - Description */}
-            <div className="hidden lg:flex lg:w-1/2 xl:w-[55%] flex-col justify-between p-12 text-white relative overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 left-20 w-64 h-64 border border-white/20 rounded-full" />
-                    <div className="absolute bottom-40 right-10 w-96 h-96 border border-white/20 rounded-full" />
-                    <div className="absolute top-1/2 left-1/3 w-48 h-48 border border-white/20 rounded-full" />
+        <div className="min-h-screen bg-[var(--bg-main)] flex transition-colors duration-300">
+            {/* Left Panel - Branding */}
+            <div className="hidden lg:flex lg:w-1/2 xl:w-[55%] relative overflow-hidden">
+                {/* Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+
+                {/* Subtle Pattern */}
+                <div className="absolute inset-0 opacity-5">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+                        backgroundSize: '40px 40px'
+                    }} />
                 </div>
 
-                {/* Logo & School Name */}
-                <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-2">
-                        <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                            <span className="text-2xl font-bold text-white">M</span>
+                {/* Floating Orbs */}
+                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+
+                {/* Content */}
+                <div className="relative z-10 flex flex-col justify-between p-12 text-white w-full">
+                    {/* Logo */}
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                            <span className="text-xl font-bold">M</span>
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold tracking-tight">SMK MARHAS</h1>
-                            <p className="text-sm text-white/70">Yayasan Pendidikan Marhamah Hasanah</p>
+                            <h1 className="text-xl font-bold tracking-tight">SMK MARHAS</h1>
+                            <p className="text-sm text-white/60">Margahayu, Bandung</p>
                         </div>
                     </div>
-                </div>
 
-                {/* Main Content */}
-                <div className="relative z-10 max-w-xl">
-                    <h2 className="text-4xl xl:text-5xl font-bold leading-tight mb-6">
-                        Dashboard Admin
-                        <span className="block text-[#F7D611]">SMK Marhas</span>
-                    </h2>
-                    <p className="text-lg text-white/80 mb-8 leading-relaxed">
-                        Sistem manajemen sekolah terpadu untuk mengelola perpustakaan, keuangan,
-                        absensi, jadwal, dan aplikasi sekolah dalam satu platform.
-                    </p>
+                    {/* Main Message */}
+                    <div className="max-w-lg">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full border border-white/20 mb-6">
+                            <Sparkles size={16} className="text-blue-400" />
+                            <span className="text-sm font-medium">Admin Dashboard</span>
+                        </div>
 
-                    {/* Feature Cards */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <FeatureCard
-                            icon={<BookOpen size={20} />}
-                            title="Perpustakaan"
-                            description="Kelola buku & peminjaman"
-                            color="#10B981"
-                        />
-                        <FeatureCard
-                            icon={<Wallet size={20} />}
-                            title="Keuangan"
-                            description="SPP & laporan keuangan"
-                            color="#F59E0B"
-                        />
-                        <FeatureCard
-                            icon={<ClipboardCheck size={20} />}
-                            title="Absensi"
-                            description="QR code & rekap kehadiran"
-                            color="#3B82F6"
-                        />
-                        <FeatureCard
-                            icon={<Calendar size={20} />}
-                            title="Jadwal"
-                            description="Manajemen jadwal pelajaran"
-                            color="#EC4899"
-                        />
-                        <FeatureCard
-                            icon={<Smartphone size={20} />}
-                            title="Aplikasi"
-                            description="Konten & notifikasi"
-                            color="#6366F1"
-                        />
-                        <FeatureCard
-                            icon={<Shield size={20} />}
-                            title="Super Admin"
-                            description="Kontrol penuh sistem"
-                            color="#7C3AED"
-                        />
+                        <h2 className="text-4xl xl:text-5xl font-bold leading-tight mb-6">
+                            Sistem Manajemen
+                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                                Sekolah Terpadu
+                            </span>
+                        </h2>
+
+                        <p className="text-lg text-white/70 leading-relaxed">
+                            Platform terpadu untuk mengelola perpustakaan, keuangan, absensi,
+                            jadwal, dan aplikasi sekolah dalam satu dashboard.
+                        </p>
+
+                        {/* Stats */}
+                        <div className="flex gap-8 mt-10">
+                            <div>
+                                <p className="text-3xl font-bold">6</p>
+                                <p className="text-sm text-white/60">Modul Admin</p>
+                            </div>
+                            <div>
+                                <p className="text-3xl font-bold">100%</p>
+                                <p className="text-sm text-white/60">Digital</p>
+                            </div>
+                            <div>
+                                <p className="text-3xl font-bold">24/7</p>
+                                <p className="text-sm text-white/60">Akses</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                {/* Footer */}
-                <div className="relative z-10 text-sm text-white/50">
-                    <p>© 2024 SMK Marhas Margahayu. All rights reserved.</p>
-                    <p className="mt-1">Powered by Marhas Connect</p>
+                    {/* Footer */}
+                    <div className="text-sm text-white/40">
+                        <p>© 2024 Yayasan Pendidikan Marhamah Hasanah</p>
+                    </div>
                 </div>
             </div>
 
             {/* Right Panel - Login Form */}
-            <div className="w-full lg:w-1/2 xl:w-[45%] flex items-center justify-center p-6 lg:p-12 bg-white lg:rounded-l-[40px]">
+            <div className="w-full lg:w-1/2 xl:w-[45%] flex items-center justify-center p-6 lg:p-12">
                 <div className="w-full max-w-md">
+                    {/* Theme Toggle */}
+                    <div className="flex justify-end mb-8">
+                        <ThemeToggle variant="dropdown" />
+                    </div>
+
                     {/* Mobile Logo */}
                     <div className="lg:hidden flex items-center gap-3 mb-8">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1E4D8C] to-[#1E3A6E] flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-xl bg-[var(--brand-primary)] flex items-center justify-center">
                             <span className="text-xl font-bold text-white">M</span>
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-gray-800">SMK MARHAS</h1>
-                            <p className="text-xs text-gray-500">Admin Dashboard</p>
+                            <h1 className="text-xl font-bold text-[var(--text-primary)]">SMK MARHAS</h1>
+                            <p className="text-xs text-[var(--text-muted)]">Admin Dashboard</p>
                         </div>
                     </div>
 
-                    {/* Welcome Text */}
+                    {/* Welcome */}
                     <div className="mb-8">
-                        <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
-                            Selamat Datang! 👋
+                        <h2 className="text-2xl lg:text-3xl font-bold text-[var(--text-primary)] mb-2">
+                            Selamat Datang
                         </h2>
-                        <p className="text-gray-500">
-                            Silakan masuk ke akun admin Anda
+                        <p className="text-[var(--text-secondary)]">
+                            Masuk ke akun admin Anda untuk melanjutkan
                         </p>
                     </div>
 
                     {/* Error Alert */}
                     {displayError && (
-                        <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 animate-fadeIn">
-                            <AlertCircle size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
+                        <div className="mb-6 p-4 bg-[var(--danger-bg)] border border-[var(--danger)]/20 rounded-xl flex items-start gap-3 animate-fadeIn">
+                            <AlertCircle size={20} className="text-[var(--danger)] mt-0.5 flex-shrink-0" />
                             <div>
-                                <p className="text-sm font-medium text-red-800">Login Gagal</p>
-                                <p className="text-sm text-red-600">{displayError}</p>
+                                <p className="text-sm font-medium text-[var(--danger)]">Login Gagal</p>
+                                <p className="text-sm text-[var(--danger)]/80">{displayError}</p>
                             </div>
                         </div>
                     )}
 
                     {/* Login Form */}
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        {/* Email Input */}
+                        {/* Email */}
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                                 Email
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Mail size={18} className="text-gray-400" />
+                                    <Mail size={18} className="text-[var(--text-muted)]" />
                                 </div>
                                 <input
                                     id="email"
@@ -205,27 +203,28 @@ export default function LoginPage() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="admin@marhas.sch.id"
                                     required
-                                    className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1E4D8C]/20 focus:border-[#1E4D8C] transition-all"
+                                    className="w-full pl-11 pr-4 py-3 bg-[var(--bg-input)] border border-[var(--border-light)] rounded-xl text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] transition-all"
                                 />
                             </div>
                         </div>
 
-                        {/* Password Input */}
+                        {/* Password */}
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)]">
                                     Password
                                 </label>
                                 <button
                                     type="button"
-                                    className="text-sm text-[#1E4D8C] hover:text-[#163a6d] font-medium"
+                                    className="text-sm text-[var(--brand-primary)] hover:underline font-medium"
+                                    onClick={() => router.push('/forgot-password')}
                                 >
                                     Lupa Password?
                                 </button>
                             </div>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Lock size={18} className="text-gray-400" />
+                                    <Lock size={18} className="text-[var(--text-muted)]" />
                                 </div>
                                 <input
                                     id="password"
@@ -234,12 +233,12 @@ export default function LoginPage() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Masukkan password"
                                     required
-                                    className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1E4D8C]/20 focus:border-[#1E4D8C] transition-all"
+                                    className="w-full pl-11 pr-12 py-3 bg-[var(--bg-input)] border border-[var(--border-light)] rounded-xl text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] transition-all"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600"
+                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -253,9 +252,9 @@ export default function LoginPage() {
                                 type="checkbox"
                                 checked={rememberDevice}
                                 onChange={(e) => setRememberDevice(e.target.checked)}
-                                className="w-4 h-4 rounded border-gray-300 text-[#1E4D8C] focus:ring-[#1E4D8C]/20 cursor-pointer"
+                                className="w-4 h-4 rounded border-[var(--border-medium)] text-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/20 cursor-pointer"
                             />
-                            <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+                            <label htmlFor="remember" className="text-sm text-[var(--text-secondary)] cursor-pointer">
                                 Ingat perangkat ini
                             </label>
                         </div>
@@ -264,7 +263,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={isSubmitting || isLoading}
-                            className="w-full py-3.5 bg-gradient-to-r from-[#1E4D8C] to-[#1E3A6E] hover:from-[#163a6d] hover:to-[#0F2847] text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-[#1E4D8C]/25"
+                            className="w-full py-3.5 bg-[var(--brand-primary)] hover:bg-[var(--brand-secondary)] text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-[var(--brand-primary)]/20"
                         >
                             {(isSubmitting || isLoading) ? (
                                 <>
@@ -280,23 +279,32 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    {/* Demo Accounts Info */}
-                    <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Akun Demo</p>
-                        <div className="space-y-2 text-sm">
-                            <DemoAccount email="superadmin@marhas.sch.id" role="Super Admin" />
-                            <DemoAccount email="perpus@marhas.sch.id" role="Perpustakaan" />
-                            <DemoAccount email="keuangan@marhas.sch.id" role="Keuangan" />
-                            <DemoAccount email="absensi@marhas.sch.id" role="Absensi" />
-                            <DemoAccount email="jadwal@marhas.sch.id" role="Jadwal" />
-                            <DemoAccount email="aplikasi@marhas.sch.id" role="Aplikasi" />
+                    {/* Demo Accounts */}
+                    <div className="mt-8 p-4 bg-[var(--bg-hover)] rounded-xl border border-[var(--border-light)]">
+                        <p className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-4">
+                            Akun Demo (6 Role Admin)
+                        </p>
+                        <div className="space-y-2">
+                            <AccountRow email="superadmin@marhas.sch.id" password="SuperAdmin123!" role="Super Admin" color="#8B5CF6" />
+                            <AccountRow email="perpus@marhas.sch.id" password="Perpus123!" role="Perpustakaan" color="#10B981" />
+                            <AccountRow email="keuangan@marhas.sch.id" password="Keuangan123!" role="Keuangan" color="#F59E0B" />
+                            <AccountRow email="absensi@marhas.sch.id" password="Absensi123!" role="Absensi" color="#3B82F6" />
+                            <AccountRow email="jadwal@marhas.sch.id" password="Jadwal123!" role="Jadwal" color="#EC4899" />
+                            <AccountRow email="aplikasi@marhas.sch.id" password="Aplikasi123!" role="Aplikasi" color="#6366F1" />
                         </div>
-                        <p className="text-xs text-gray-400 mt-3">Password: [Role]123! (contoh: Perpus123!)</p>
+                        <div className="mt-4 pt-3 border-t border-[var(--border-light)]">
+                            <p className="text-xs text-[var(--text-muted)]">
+                                Format password: <code className="font-mono bg-[var(--bg-active)] px-1 rounded">[Role]123!</code>
+                            </p>
+                        </div>
                     </div>
 
-                    {/* Footer */}
-                    <p className="mt-6 text-center text-sm text-gray-400">
-                        Butuh bantuan? <a href="#" className="text-[#1E4D8C] hover:underline">Hubungi IT Support</a>
+                    {/* Help */}
+                    <p className="mt-6 text-center text-sm text-[var(--text-muted)]">
+                        Butuh bantuan?{' '}
+                        <a href="#" className="text-[var(--brand-primary)] hover:underline">
+                            Hubungi IT Support
+                        </a>
                     </p>
                 </div>
             </div>
@@ -304,40 +312,21 @@ export default function LoginPage() {
     );
 }
 
-// ============================================
-// SUB-COMPONENTS
-// ============================================
-
-function FeatureCard({
-    icon,
-    title,
-    description,
-    color
-}: {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    color: string;
-}) {
+function AccountRow({ email, password, role, color }: { email: string; password: string; role: string; color: string }) {
     return (
-        <div className="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 transition-colors group">
-            <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center mb-3 transition-transform group-hover:scale-110"
-                style={{ backgroundColor: `${color}20`, color }}
-            >
-                {icon}
+        <div className="flex flex-col gap-1 p-3 rounded-lg bg-[var(--bg-active)] hover:ring-2 hover:ring-[var(--brand-primary)]/20 transition-all cursor-pointer">
+            <div className="flex items-center justify-between gap-2">
+                <span className="text-[var(--text-primary)] font-mono text-sm">{email}</span>
+                <span
+                    className="text-xs px-2 py-0.5 rounded-full text-white font-medium shrink-0"
+                    style={{ backgroundColor: color }}
+                >
+                    {role}
+                </span>
             </div>
-            <h3 className="font-semibold text-white text-sm mb-1">{title}</h3>
-            <p className="text-xs text-white/60">{description}</p>
-        </div>
-    );
-}
-
-function DemoAccount({ email, role }: { email: string; role: string }) {
-    return (
-        <div className="flex items-center justify-between">
-            <span className="text-gray-600 font-mono text-xs">{email}</span>
-            <span className="text-xs px-2 py-0.5 bg-gray-200 rounded-full text-gray-600">{role}</span>
+            <div className="text-xs text-[var(--text-muted)]">
+                Password: <code className="font-mono text-[var(--text-secondary)] bg-[var(--bg-hover)] px-1.5 py-0.5 rounded">{password}</code>
+            </div>
         </div>
     );
 }

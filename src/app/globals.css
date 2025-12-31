@@ -2,70 +2,143 @@
 
 /* ============================================
    MARHAS ADMIN DASHBOARD - DESIGN SYSTEM
+   Complete Dark/Light Mode Support
    ============================================ */
 
+/* ============================================
+   LIGHT MODE (Default)
+   ============================================ */
 :root {
-  /* Primary Colors */
-  --primary-blue: #1E88E5;
-  --light-blue: #42A5F5;
-  --purple-ai: #7C4DFF;
-  
+  /* Brand Colors */
+  --brand-primary: #1E4D8C;
+  --brand-secondary: #2563EB;
+  --brand-accent: #3B82F6;
+
+  /* Legacy Aliases (used by old components) */
+  --primary-blue: #1E4D8C;
+  --light-blue: #3B82F6;
+
   /* Background Colors */
-  --background: #F5F7FB;
-  --card-white: #FFFFFF;
-  
+  --bg-main: #F5F7FB;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-hover: #F3F4F6;
+  --bg-active: #E5E7EB;
+  --bg-input: #F9FAFB;
+  --bg-sidebar: #FFFFFF;
+  --bg-header: rgba(255, 255, 255, 0.9);
+
   /* Text Colors */
-  --text-dark: #1F2937;
+  --text-primary: #1F2937;
+  --text-secondary: #4B5563;
+  --text-muted: #9CA3AF;
+  --text-inverse: #FFFFFF;
+  --text-dark: #111827;
   --text-grey: #6B7280;
-  --text-light: #9CA3AF;
-  
+
+  /* Border Colors */
+  --border-light: #E5E7EB;
+  --border-medium: #D1D5DB;
+  --border-dark: #9CA3AF;
+
   /* Status Colors */
-  --success-green: #10B981;
-  --warning-orange: #F59E0B;
-  --danger-red: #EF4444;
-  --info-teal: #14B8A6;
-  --pink: #EC4899;
-  
-  /* Quick Action Colors */
-  --action-blue: #3B82F6;
-  --action-green: #22C55E;
-  --action-orange: #F97316;
-  --action-purple: #8B5CF6;
-  --action-pink: #EC4899;
-  --action-teal: #14B8A6;
-  --action-dark-orange: #EA580C;
-  --action-grey: #6B7280;
-  
+  --success: #10B981;
+  --success-bg: #D1FAE5;
+  --warning: #F59E0B;
+  --warning-bg: #FEF3C7;
+  --danger: #EF4444;
+  --danger-bg: #FEE2E2;
+  --info: #3B82F6;
+  --info-bg: #DBEAFE;
+
+  /* Role Colors */
+  --role-super-admin: #7C3AED;
+  --role-perpustakaan: #10B981;
+  --role-keuangan: #F59E0B;
+  --role-absensi: #3B82F6;
+  --role-jadwal: #EC4899;
+  --role-aplikasi: #6366F1;
+
   /* Shadows */
-  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
   /* Transitions */
   --transition-fast: 150ms ease-out;
   --transition-normal: 200ms ease-out;
   --transition-slow: 300ms ease-out;
-  
+
   /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
   --radius-full: 9999px;
 }
 
+/* ============================================
+   DARK MODE
+   ============================================ */
+.dark {
+  /* Background Colors */
+  --bg-main: #0F172A;
+  --bg-card: #1E293B;
+  --bg-elevated: #334155;
+  --bg-hover: #334155;
+  --bg-active: #475569;
+  --bg-input: #1E293B;
+  --bg-sidebar: #1E293B;
+  --bg-header: rgba(30, 41, 59, 0.95);
+
+  /* Legacy Aliases (used by old components) */
+  --primary-blue: #3B82F6;
+  --light-blue: #60A5FA;
+
+  /* Text Colors */
+  --text-primary: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #64748B;
+  --text-inverse: #0F172A;
+  --text-dark: #F8FAFC;
+  --text-grey: #94A3B8;
+
+  /* Border Colors */
+  --border-light: #334155;
+  --border-medium: #475569;
+  --border-dark: #64748B;
+
+  /* Status Colors (adjusted for dark) */
+  --success-bg: rgba(16, 185, 129, 0.2);
+  --warning-bg: rgba(245, 158, 11, 0.2);
+  --danger-bg: rgba(239, 68, 68, 0.2);
+  --info-bg: rgba(59, 130, 246, 0.2);
+
+  /* Shadows (stronger for dark mode) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   TAILWIND THEME INTEGRATION
+   ============================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--text-dark);
-  --color-primary: var(--primary-blue);
-  --color-primary-light: var(--light-blue);
-  --color-purple-ai: var(--purple-ai);
-  --color-card: var(--card-white);
-  --color-text-grey: var(--text-grey);
+  --color-background: var(--bg-main);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--bg-card);
+  --color-primary: var(--brand-primary);
+  --color-muted: var(--text-muted);
+  --color-border: var(--border-light);
   --font-sans: "Inter", "Poppins", system-ui, sans-serif;
 }
 
-/* Base Styles */
+/* ============================================
+   BASE STYLES
+   ============================================ */
 * {
   box-sizing: border-box;
 }
@@ -75,69 +148,111 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--text-dark);
+  background: var(--bg-main);
+  color: var(--text-primary);
   font-family: "Inter", "Poppins", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography Utilities */
-.font-semibold { font-weight: 600; }
-.font-medium { font-weight: 500; }
-.font-normal { font-weight: 400; }
-.font-light { font-weight: 300; }
+/* ============================================
+   COMPONENT CLASSES
+   ============================================ */
 
-/* Card Utilities */
+/* Cards */
 .card {
-  background: var(--card-white);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-sm);
   padding: 16px;
-}
-
-.card-hover {
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: all var(--transition-normal);
 }
 
 .card-hover:hover {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-/* Gradient Backgrounds */
-.gradient-blue {
-  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #60A5FA 100%);
+/* Inputs */
+.input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  transition: all var(--transition-fast);
 }
 
-.gradient-purple {
-  background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+.input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(30, 77, 140, 0.15);
 }
 
-/* Sidebar Active State */
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--brand-primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background: var(--brand-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-active);
+}
+
+/* Navigation */
 .nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--radius-full);
-  color: var(--text-grey);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
   font-weight: 500;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-fast);
   cursor: pointer;
 }
 
 .nav-item:hover {
-  background: rgba(30, 136, 229, 0.08);
-  color: var(--primary-blue);
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .nav-item.active {
-  background: rgba(30, 136, 229, 0.12);
-  color: var(--primary-blue);
+  background: rgba(30, 77, 140, 0.1);
+  color: var(--brand-primary);
 }
 
-/* Badge Styles */
+.dark .nav-item.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--brand-accent);
+}
+
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -149,37 +264,78 @@ body {
   letter-spacing: 0.5px;
 }
 
-.badge-admin {
-  background: rgba(30, 136, 229, 0.15);
-  color: var(--primary-blue);
+.badge-success {
+  background: var(--success-bg);
+  color: var(--success);
 }
 
-.badge-event {
-  background: rgba(236, 72, 153, 0.15);
-  color: var(--pink);
+.badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
 }
 
-.badge-academic {
-  background: rgba(59, 130, 246, 0.15);
-  color: var(--action-blue);
+.badge-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
-.badge-published {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--success-green);
+.badge-info {
+  background: var(--info-bg);
+  color: var(--info);
 }
 
-.badge-scheduled {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--warning-orange);
+/* Tables */
+.table-header {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
 }
 
-.badge-draft {
-  background: rgba(107, 114, 128, 0.15);
-  color: var(--text-grey);
+.table-row {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--transition-fast);
 }
 
-/* Scrollbar Styling */
+.table-row:hover {
+  background: var(--bg-hover);
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-light);
+}
+
+/* Header */
+.header {
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* Modal */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -190,20 +346,183 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--text-muted);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--text-secondary);
 }
 
-/* Animation Utilities */
+/* ============================================
+   ANIMATIONS
+   ============================================ */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   GRADIENTS
+   ============================================ */
+.gradient-brand {
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.bg-main {
+  background: var(--bg-main);
+}
+
+.bg-card {
+  background: var(--bg-card);
+}
+
+.bg-elevated {
+  background: var(--bg-elevated);
+}
+
+.border-light {
+  border-color: var(--border-light);
+}
+
+/* ============================================
+   DARK MODE OVERRIDES FOR LEGACY PAGES
+   Auto-override common Tailwind gray classes
+   ============================================ */
+.dark .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: var(--bg-hover) !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: var(--bg-active) !important;
+}
+
+.dark .text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-gray-700 {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+.dark .text-gray-400 {
+  color: var(--text-muted) !important;
+}
+
+.dark .border-gray-200 {
+  border-color: var(--border-light) !important;
+}
+
+.dark .border-gray-100 {
+  border-color: var(--border-light) !important;
+}
+
+.dark .divide-gray-100> :not([hidden])~ :not([hidden]) {
+  border-color: var(--border-light) !important;
+}
+
+.dark .divide-gray-200> :not([hidden])~ :not([hidden]) {
+  border-color: var(--border-light) !important;
+}
+
+.dark .hover\:bg-gray-50:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: var(--bg-active) !important;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+.dark input::placeholder,
+.dark select::placeholder,
+.dark textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Force option styling in dark mode */
+.dark option {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
 }

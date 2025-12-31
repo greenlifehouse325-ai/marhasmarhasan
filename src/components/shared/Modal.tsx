@@ -2,7 +2,7 @@
  * Modal Component
  * SMK Marhas Admin Dashboard - Shared Components
  * 
- * Reusable modal dialog component
+ * Reusable modal dialog component with dark mode support
  */
 
 'use client';
@@ -74,20 +74,20 @@ export function Modal({
 
             {/* Modal */}
             <div
-                className={`relative w-full ${sizeClasses[size]} bg-white rounded-2xl shadow-2xl animate-scaleIn`}
+                className={`relative w-full ${sizeClasses[size]} bg-[var(--bg-card)] border border-[var(--border-light)] rounded-2xl shadow-2xl animate-scaleIn`}
             >
                 {/* Header */}
                 {(title || showCloseButton) && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-light)]">
                         {title && (
-                            <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h2>
                         )}
                         {showCloseButton && (
                             <button
                                 onClick={onClose}
-                                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors ml-auto"
+                                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[var(--bg-hover)] transition-colors ml-auto"
                             >
-                                <X size={18} className="text-gray-500" />
+                                <X size={18} className="text-[var(--text-muted)]" />
                             </button>
                         )}
                     </div>
@@ -100,7 +100,7 @@ export function Modal({
 
                 {/* Footer */}
                 {footer && (
-                    <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50 rounded-b-2xl">
+                    <div className="px-6 py-4 border-t border-[var(--border-light)] bg-[var(--bg-hover)] rounded-b-2xl">
                         {footer}
                     </div>
                 )}

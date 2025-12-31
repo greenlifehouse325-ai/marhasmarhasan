@@ -3,6 +3,7 @@
  * SMK Marhas Admin Dashboard
  * 
  * Halaman untuk melihat dan mengedit profil admin
+ * With proper dark mode support
  */
 
 'use client';
@@ -17,8 +18,6 @@ import {
     Save,
     Key,
     Clock,
-    MapPin,
-    Calendar,
     LogOut,
     Loader2,
     CheckCircle,
@@ -72,29 +71,29 @@ export default function ProfilPage() {
         <div className="space-y-6 animate-fadeIn">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-bold text-gray-800">Profil Saya</h1>
-                <p className="text-gray-500">Kelola informasi akun dan keamanan</p>
+                <h1 className="text-2xl font-bold text-[var(--text-primary)]">Profil Saya</h1>
+                <p className="text-[var(--text-muted)]">Kelola informasi akun dan keamanan</p>
             </div>
 
             {/* Profile Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-light)] rounded-2xl p-6 shadow-sm">
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                     {/* Avatar */}
                     <div className="relative">
-                        <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                            <span className="text-3xl font-bold text-indigo-600">
+                        <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center">
+                            <span className="text-3xl font-bold text-[var(--brand-primary)]">
                                 {user?.name?.charAt(0) || 'A'}
                             </span>
                         </div>
-                        <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-white rounded-lg shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors">
-                            <Camera size={16} className="text-gray-600" />
+                        <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-[var(--bg-card)] border border-[var(--border-light)] rounded-lg shadow-md flex items-center justify-center hover:bg-[var(--bg-hover)] transition-colors">
+                            <Camera size={16} className="text-[var(--text-secondary)]" />
                         </button>
                     </div>
 
                     {/* Info */}
                     <div className="flex-1">
-                        <h2 className="text-xl font-bold text-gray-800">{user?.name}</h2>
-                        <p className="text-gray-500">{user?.email}</p>
+                        <h2 className="text-xl font-bold text-[var(--text-primary)]">{user?.name}</h2>
+                        <p className="text-[var(--text-muted)]">{user?.email}</p>
                         <div className="flex items-center gap-2 mt-2">
                             <span
                                 className="px-3 py-1 text-xs font-medium rounded-full text-white"
@@ -102,7 +101,7 @@ export default function ProfilPage() {
                             >
                                 {roleLabels[user?.role || 'super_admin']}
                             </span>
-                            <span className="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                            <span className="px-2 py-1 text-xs font-medium text-green-700 bg-green-500/20 rounded-full">
                                 Aktif
                             </span>
                         </div>
@@ -111,30 +110,30 @@ export default function ProfilPage() {
                     {/* Stats */}
                     <div className="grid grid-cols-3 gap-4">
                         <div className="text-center">
-                            <p className="text-2xl font-bold text-gray-800">156</p>
-                            <p className="text-xs text-gray-500">Hari Login</p>
+                            <p className="text-2xl font-bold text-[var(--text-primary)]">156</p>
+                            <p className="text-xs text-[var(--text-muted)]">Hari Login</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-2xl font-bold text-gray-800">2.4K</p>
-                            <p className="text-xs text-gray-500">Aksi</p>
+                            <p className="text-2xl font-bold text-[var(--text-primary)]">2.4K</p>
+                            <p className="text-xs text-[var(--text-muted)]">Aksi</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-2xl font-bold text-gray-800">99%</p>
-                            <p className="text-xs text-gray-500">Uptime</p>
+                            <p className="text-2xl font-bold text-[var(--text-primary)]">99%</p>
+                            <p className="text-xs text-[var(--text-muted)]">Uptime</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto">
                 {tabs.map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id as 'profile' | 'security' | 'activity')}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${activeTab === tab.id
-                                ? 'bg-indigo-50 text-indigo-700'
-                                : 'text-gray-600 hover:bg-gray-100'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${activeTab === tab.id
+                            ? 'bg-[var(--brand-primary)] text-white'
+                            : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
                             }`}
                     >
                         {tab.icon}
@@ -144,45 +143,45 @@ export default function ProfilPage() {
             </div>
 
             {/* Tab Content */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-light)] rounded-2xl p-6 shadow-sm">
                 {activeTab === 'profile' && (
                     <div className="space-y-6">
-                        <h3 className="text-lg font-semibold text-gray-800">Informasi Profil</h3>
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Informasi Profil</h3>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-2">Nama Lengkap</label>
+                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Nama Lengkap</label>
                                 <div className="relative">
-                                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
                                     <input
                                         type="text"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                                        className="w-full pl-11 pr-4 py-3 bg-[var(--bg-input)] border border-[var(--border-light)] rounded-xl text-sm text-[var(--text-primary)]"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-2">Email</label>
+                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Email</label>
                                 <div className="relative">
-                                    <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
                                     <input
                                         type="email"
                                         value={formData.email}
                                         disabled
-                                        className="w-full pl-11 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm text-gray-500"
+                                        className="w-full pl-11 pr-4 py-3 bg-[var(--bg-hover)] border border-[var(--border-light)] rounded-xl text-sm text-[var(--text-muted)]"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-2">No. Telepon</label>
+                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">No. Telepon</label>
                                 <div className="relative">
-                                    <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
                                     <input
                                         type="tel"
                                         value={formData.phone}
                                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                        className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                                        className="w-full pl-11 pr-4 py-3 bg-[var(--bg-input)] border border-[var(--border-light)] rounded-xl text-sm text-[var(--text-primary)]"
                                     />
                                 </div>
                             </div>
@@ -191,7 +190,7 @@ export default function ProfilPage() {
                         <button
                             onClick={handleSave}
                             disabled={isSaving}
-                            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                            className="flex items-center gap-2 px-6 py-2.5 bg-[var(--brand-primary)] text-white text-sm font-medium rounded-xl hover:opacity-90 transition-colors disabled:opacity-50"
                         >
                             {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                             {isSaving ? 'Menyimpan...' : 'Simpan Perubahan'}
@@ -201,55 +200,55 @@ export default function ProfilPage() {
 
                 {activeTab === 'security' && (
                     <div className="space-y-6">
-                        <h3 className="text-lg font-semibold text-gray-800">Keamanan Akun</h3>
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Keamanan Akun</h3>
 
                         <div className="space-y-4">
-                            <div className="p-4 border border-gray-200 rounded-xl">
+                            <div className="p-4 border border-[var(--border-light)] rounded-xl">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                            <CheckCircle size={20} className="text-green-600" />
+                                        <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                            <CheckCircle size={20} className="text-green-500" />
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-800">Two-Factor Authentication</p>
-                                            <p className="text-sm text-gray-500">Terverifikasi via OTP</p>
+                                            <p className="font-medium text-[var(--text-primary)]">Two-Factor Authentication</p>
+                                            <p className="text-sm text-[var(--text-muted)]">Terverifikasi via OTP</p>
                                         </div>
                                     </div>
-                                    <span className="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                                    <span className="px-3 py-1 text-xs font-medium text-green-700 bg-green-500/20 rounded-full">
                                         Aktif
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="p-4 border border-gray-200 rounded-xl">
+                            <div className="p-4 border border-[var(--border-light)] rounded-xl">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                                            <Key size={20} className="text-gray-600" />
+                                        <div className="w-10 h-10 bg-[var(--bg-hover)] rounded-lg flex items-center justify-center">
+                                            <Key size={20} className="text-[var(--text-secondary)]" />
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-800">Password</p>
-                                            <p className="text-sm text-gray-500">Terakhir diubah 30 hari lalu</p>
+                                            <p className="font-medium text-[var(--text-primary)]">Password</p>
+                                            <p className="text-sm text-[var(--text-muted)]">Terakhir diubah 30 hari lalu</p>
                                         </div>
                                     </div>
-                                    <button className="px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                                    <button className="px-4 py-2 text-sm font-medium text-[var(--brand-primary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors">
                                         Ubah Password
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="p-4 border border-gray-200 rounded-xl">
+                            <div className="p-4 border border-[var(--border-light)] rounded-xl">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                                            <LogOut size={20} className="text-gray-600" />
+                                        <div className="w-10 h-10 bg-[var(--bg-hover)] rounded-lg flex items-center justify-center">
+                                            <LogOut size={20} className="text-[var(--text-secondary)]" />
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-800">Sesi Aktif</p>
-                                            <p className="text-sm text-gray-500">2 perangkat terhubung</p>
+                                            <p className="font-medium text-[var(--text-primary)]">Sesi Aktif</p>
+                                            <p className="text-sm text-[var(--text-muted)]">2 perangkat terhubung</p>
                                         </div>
                                     </div>
-                                    <button className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <button className="px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/10 rounded-lg transition-colors">
                                         Logout Semua
                                     </button>
                                 </div>
@@ -260,21 +259,21 @@ export default function ProfilPage() {
 
                 {activeTab === 'activity' && (
                     <div className="space-y-6">
-                        <h3 className="text-lg font-semibold text-gray-800">Riwayat Aktivitas</h3>
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Riwayat Aktivitas</h3>
 
                         <div className="space-y-3">
                             {[
-                                { action: 'Login berhasil', time: '2 menit lalu', icon: <CheckCircle size={16} />, color: 'text-green-600' },
-                                { action: 'Menambah buku baru', time: '1 jam lalu', icon: <CheckCircle size={16} />, color: 'text-green-600' },
-                                { action: 'Mengubah pengaturan', time: '3 jam lalu', icon: <AlertCircle size={16} />, color: 'text-amber-600' },
-                                { action: 'Verifikasi pembayaran SPP', time: '5 jam lalu', icon: <CheckCircle size={16} />, color: 'text-green-600' },
-                                { action: 'Login dari perangkat baru', time: '1 hari lalu', icon: <AlertCircle size={16} />, color: 'text-amber-600' },
+                                { action: 'Login berhasil', time: '2 menit lalu', icon: <CheckCircle size={16} />, color: 'text-green-500' },
+                                { action: 'Menambah buku baru', time: '1 jam lalu', icon: <CheckCircle size={16} />, color: 'text-green-500' },
+                                { action: 'Mengubah pengaturan', time: '3 jam lalu', icon: <AlertCircle size={16} />, color: 'text-amber-500' },
+                                { action: 'Verifikasi pembayaran SPP', time: '5 jam lalu', icon: <CheckCircle size={16} />, color: 'text-green-500' },
+                                { action: 'Login dari perangkat baru', time: '1 hari lalu', icon: <AlertCircle size={16} />, color: 'text-amber-500' },
                             ].map((activity, idx) => (
-                                <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                <div key={idx} className="flex items-center gap-3 p-3 bg-[var(--bg-hover)] rounded-xl">
                                     <span className={activity.color}>{activity.icon}</span>
                                     <div className="flex-1">
-                                        <p className="text-sm font-medium text-gray-800">{activity.action}</p>
-                                        <p className="text-xs text-gray-500">{activity.time}</p>
+                                        <p className="text-sm font-medium text-[var(--text-primary)]">{activity.action}</p>
+                                        <p className="text-xs text-[var(--text-muted)]">{activity.time}</p>
                                     </div>
                                 </div>
                             ))}

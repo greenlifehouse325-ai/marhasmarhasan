@@ -318,17 +318,17 @@ export default function KelolaAdminPage() {
 
 function StatCard({ label, value, icon, color }: { label: string; value: string; icon: React.ReactNode; color: string }) {
     return (
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-            <div className="flex items-center gap-3">
+        <div className="bg-[var(--bg-card)] rounded-xl p-5 shadow-sm border border-[var(--border-light)]">
+            <div className="flex items-center gap-4">
                 <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
                     style={{ backgroundColor: `${color}15`, color }}
                 >
                     {icon}
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-gray-800">{value}</p>
-                    <p className="text-sm text-gray-500">{label}</p>
+                    <p className="text-3xl font-bold text-[var(--text-primary)]">{value}</p>
+                    <p className="text-base font-medium text-[var(--text-secondary)]">{label}</p>
                 </div>
             </div>
         </div>

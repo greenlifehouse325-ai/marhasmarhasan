@@ -136,13 +136,13 @@ export default function NotifikasiPage() {
                         {filteredNotifications.map(notification => (
                             <div
                                 key={notification.id}
-                                className={`p-4 hover:bg-gray-50 transition-colors ${!notification.isRead ? 'bg-blue-50/50' : ''}`}
+                                className={`p-4 hover:bg-gray-50 transition-colors ${!notification.isRead ? 'bg-[var(--info-bg)] border-l-4 border-l-[var(--info)]' : ''}`}
                             >
                                 <div className="flex items-start gap-4">
                                     {/* Icon */}
                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${notification.type === 'info' ? 'bg-blue-100' :
-                                            notification.type === 'warning' ? 'bg-amber-100' :
-                                                notification.type === 'success' ? 'bg-green-100' : 'bg-indigo-100'
+                                        notification.type === 'warning' ? 'bg-amber-100' :
+                                            notification.type === 'success' ? 'bg-green-100' : 'bg-indigo-100'
                                         }`}>
                                         {TYPE_ICONS[notification.type]}
                                     </div>

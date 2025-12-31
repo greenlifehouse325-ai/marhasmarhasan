@@ -3,6 +3,7 @@
  * SMK Marhas Admin Dashboard - Shared Components
  * 
  * Confirmation dialog dengan optional cooldown untuk aksi berbahaya
+ * Full dark mode support
  */
 
 'use client';
@@ -30,26 +31,34 @@ const typeConfig = {
     warning: {
         icon: AlertTriangle,
         iconColor: 'text-amber-500',
-        iconBg: 'bg-amber-100',
+        iconBg: 'bg-amber-500/20',
         buttonColor: 'bg-amber-500 hover:bg-amber-600',
+        progressBg: 'bg-amber-500/20',
+        progressFill: 'bg-amber-500',
     },
     danger: {
         icon: AlertTriangle,
         iconColor: 'text-red-500',
-        iconBg: 'bg-red-100',
+        iconBg: 'bg-red-500/20',
         buttonColor: 'bg-red-500 hover:bg-red-600',
+        progressBg: 'bg-red-500/20',
+        progressFill: 'bg-red-500',
     },
     info: {
         icon: Info,
         iconColor: 'text-blue-500',
-        iconBg: 'bg-blue-100',
+        iconBg: 'bg-blue-500/20',
         buttonColor: 'bg-blue-500 hover:bg-blue-600',
+        progressBg: 'bg-blue-500/20',
+        progressFill: 'bg-blue-500',
     },
     success: {
         icon: CheckCircle,
         iconColor: 'text-green-500',
-        iconBg: 'bg-green-100',
+        iconBg: 'bg-green-500/20',
         buttonColor: 'bg-green-500 hover:bg-green-600',
+        progressBg: 'bg-green-500/20',
+        progressFill: 'bg-green-500',
     },
 };
 
@@ -125,20 +134,20 @@ export function ConfirmModal({
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">{title}</h3>
 
                 {/* Message */}
-                <p className="text-sm text-gray-600 mb-4">{message}</p>
+                <p className="text-sm text-[var(--text-secondary)] mb-4">{message}</p>
 
                 {/* Countdown */}
                 {countdown > 0 && (
-                    <div className="mb-4 p-3 bg-amber-50 rounded-xl">
-                        <p className="text-sm text-amber-700">
+                    <div className={`mb-4 p-3 ${config.progressBg} rounded-xl`}>
+                        <p className={`text-sm ${config.iconColor}`}>
                             Mohon tunggu <span className="font-bold">{countdown} detik</span> sebelum konfirmasi
                         </p>
-                        <div className="mt-2 h-1.5 bg-amber-200 rounded-full overflow-hidden">
+                        <div className={`mt-2 h-1.5 ${config.progressBg} rounded-full overflow-hidden`}>
                             <div
-                                className="h-full bg-amber-500 rounded-full transition-all duration-1000"
+                                className={`h-full ${config.progressFill} rounded-full transition-all duration-1000`}
                                 style={{ width: `${(countdown / cooldownSeconds) * 100}%` }}
                             />
                         </div>
@@ -148,15 +157,15 @@ export function ConfirmModal({
                 {/* Confirm Text Input */}
                 {requireConfirmText && countdown === 0 && (
                     <div className="mb-4">
-                        <p className="text-sm text-gray-600 mb-2">
-                            Ketik <span className="font-mono font-bold text-red-600">{requireConfirmText}</span> untuk konfirmasi:
+                        <p className="text-sm text-[var(--text-secondary)] mb-2">
+                            Ketik <span className="font-mono font-bold text-red-500">{requireConfirmText}</span> untuk konfirmasi:
                         </p>
                         <input
                             type="text"
                             value={confirmInput}
                             onChange={(e) => setConfirmInput(e.target.value)}
                             placeholder={requireConfirmText}
-                            className="w-full px-4 py-2.5 text-center font-mono text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
+                            className="w-full px-4 py-2.5 text-center font-mono text-sm text-[var(--text-primary)] bg-[var(--bg-input)] border border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
                             autoFocus
                         />
                     </div>
@@ -167,7 +176,7 @@ export function ConfirmModal({
                     <button
                         onClick={onClose}
                         disabled={isLoading}
-                        className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors disabled:opacity-50"
+                        className="flex-1 px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] bg-[var(--bg-hover)] rounded-xl hover:bg-[var(--bg-active)] transition-colors disabled:opacity-50"
                     >
                         {cancelText}
                     </button>

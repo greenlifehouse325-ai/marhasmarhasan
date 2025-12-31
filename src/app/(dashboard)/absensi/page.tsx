@@ -3,6 +3,7 @@
  * SMK Marhas Admin Dashboard
  * 
  * Dashboard untuk Admin Absensi dengan overview kehadiran dan session QR
+ * THEME-AWARE VERSION
  */
 
 'use client';
@@ -95,8 +96,8 @@ export default function AbsensiDashboard() {
                 {/* Left Column */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Quick Actions */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Aksi Cepat</h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <QuickAction
                                 label="Buat Session QR"
@@ -126,12 +127,12 @@ export default function AbsensiDashboard() {
                     </div>
 
                     {/* Active Sessions */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-gray-800">Session Aktif</h2>
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Session Aktif</h2>
                             <Link
                                 href="/absensi/session"
-                                className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                                className="text-sm text-blue-500 hover:text-blue-600 flex items-center gap-1"
                             >
                                 Semua Session <ArrowRight size={14} />
                             </Link>
@@ -158,61 +159,26 @@ export default function AbsensiDashboard() {
                     </div>
 
                     {/* Class Attendance Today */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-gray-800">Kehadiran Per Kelas Hari Ini</h2>
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Kehadiran Per Kelas Hari Ini</h2>
+                            <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                                 <Calendar size={14} />
                                 <span>29 Des 2024</span>
                             </div>
                         </div>
 
                         <div className="space-y-3">
-                            <ClassAttendanceRow
-                                className="XII PPLG 1"
-                                hadir={32}
-                                alpha={0}
-                                izin={1}
-                                sakit={1}
-                                total={34}
-                            />
-                            <ClassAttendanceRow
-                                className="XII PPLG 2"
-                                hadir={30}
-                                alpha={2}
-                                izin={1}
-                                sakit={0}
-                                total={33}
-                            />
-                            <ClassAttendanceRow
-                                className="XI TMS 1"
-                                hadir={28}
-                                alpha={3}
-                                izin={2}
-                                sakit={1}
-                                total={34}
-                            />
-                            <ClassAttendanceRow
-                                className="XI TMS 2"
-                                hadir={31}
-                                alpha={1}
-                                izin={0}
-                                sakit={2}
-                                total={34}
-                            />
-                            <ClassAttendanceRow
-                                className="X PPLG 1"
-                                hadir={33}
-                                alpha={0}
-                                izin={1}
-                                sakit={1}
-                                total={35}
-                            />
+                            <ClassAttendanceRow className="XII PPLG 1" hadir={32} alpha={0} izin={1} sakit={1} total={34} />
+                            <ClassAttendanceRow className="XII PPLG 2" hadir={30} alpha={2} izin={1} sakit={0} total={33} />
+                            <ClassAttendanceRow className="XI TMS 1" hadir={28} alpha={3} izin={2} sakit={1} total={34} />
+                            <ClassAttendanceRow className="XI TMS 2" hadir={31} alpha={1} izin={0} sakit={2} total={34} />
+                            <ClassAttendanceRow className="X PPLG 1" hadir={33} alpha={0} izin={1} sakit={1} total={35} />
                         </div>
 
                         <Link
                             href="/absensi/rekap-kelas"
-                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-lg transition-colors"
                         >
                             Lihat Semua Kelas <ArrowRight size={14} />
                         </Link>
@@ -222,93 +188,61 @@ export default function AbsensiDashboard() {
                 {/* Right Column */}
                 <div className="space-y-6">
                     {/* Frequent Absentees */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold text-gray-800">Sering Bolos</h2>
+                            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Sering Bolos</h2>
                             <AlertTriangle size={18} className="text-amber-500" />
                         </div>
 
                         <div className="space-y-3">
-                            <AbsenteeItem
-                                name="Deni Pratama"
-                                class="XI TMS 1"
-                                absences={8}
-                            />
-                            <AbsenteeItem
-                                name="Rina Safitri"
-                                class="XII PPLG 2"
-                                absences={6}
-                            />
-                            <AbsenteeItem
-                                name="Agus Setiawan"
-                                class="X TKJ 1"
-                                absences={5}
-                            />
-                            <AbsenteeItem
-                                name="Lisa Permata"
-                                class="XI PPLG 1"
-                                absences={4}
-                            />
+                            <AbsenteeItem name="Deni Pratama" class="XI TMS 1" absences={8} />
+                            <AbsenteeItem name="Rina Safitri" class="XII PPLG 2" absences={6} />
+                            <AbsenteeItem name="Agus Setiawan" class="X TKJ 1" absences={5} />
+                            <AbsenteeItem name="Lisa Permata" class="XI PPLG 1" absences={4} />
                         </div>
 
                         <Link
                             href="/absensi/riwayat"
-                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-lg transition-colors"
                         >
                             Lihat Riwayat <ArrowRight size={14} />
                         </Link>
                     </div>
 
                     {/* Weekly Trend */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Tren Minggu Ini</h2>
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Tren Minggu Ini</h2>
 
                         <div className="flex items-end justify-between h-32 px-2">
                             {[94, 92, 95, 91, 93, 89, 93].map((value, index) => (
                                 <div key={index} className="flex flex-col items-center gap-2 flex-1">
                                     <div
-                                        className={`w-6 rounded-t transition-all ${value >= 93 ? 'bg-green-500' : value >= 90 ? 'bg-amber-500' : 'bg-red-500'
-                                            }`}
+                                        className={`w-6 rounded-t transition-all ${value >= 93 ? 'bg-green-500' : value >= 90 ? 'bg-amber-500' : 'bg-red-500'}`}
                                         style={{ height: `${value}px` }}
                                     />
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs text-[var(--text-muted)]">
                                         {['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'][index]}
                                     </span>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="mt-4 pt-4 border-t border-[var(--border-light)]">
                             <div className="flex items-center justify-between text-sm">
-                                <span className="text-gray-500">Rata-rata minggu ini</span>
-                                <span className="font-semibold text-green-600">92.4%</span>
+                                <span className="text-[var(--text-muted)]">Rata-rata minggu ini</span>
+                                <span className="font-semibold text-green-500">92.4%</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Recent Uploads */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Scan Terakhir</h2>
+                    {/* Recent Scans */}
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Scan Terakhir</h2>
 
                         <div className="space-y-3">
-                            <RecentScan
-                                name="Ahmad Rizky"
-                                class="XII PPLG 1"
-                                time="07:45"
-                                status="hadir"
-                            />
-                            <RecentScan
-                                name="Siti Nurhaliza"
-                                class="XI TKJ 2"
-                                time="07:44"
-                                status="hadir"
-                            />
-                            <RecentScan
-                                name="Budi Santoso"
-                                class="X PPLG 1"
-                                time="07:43"
-                                status="terlambat"
-                            />
+                            <RecentScan name="Ahmad Rizky" class="XII PPLG 1" time="07:45" status="hadir" />
+                            <RecentScan name="Siti Nurhaliza" class="XI TKJ 2" time="07:44" status="hadir" />
+                            <RecentScan name="Budi Santoso" class="X PPLG 1" time="07:43" status="terlambat" />
                         </div>
                     </div>
                 </div>
@@ -318,7 +252,7 @@ export default function AbsensiDashboard() {
 }
 
 // ============================================
-// SUB-COMPONENTS
+// SUB-COMPONENTS (THEME-AWARE)
 // ============================================
 
 function AttendanceStatCard({
@@ -335,18 +269,18 @@ function AttendanceStatCard({
     color: string;
 }) {
     return (
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
+        <div className="bg-[var(--bg-card)] rounded-2xl p-4 shadow-sm border border-[var(--border-light)]">
             <div className="flex items-center gap-3 mb-2">
                 <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${color}15`, color }}
+                    style={{ backgroundColor: `${color}20`, color }}
                 >
                     {icon}
                 </div>
-                <span className="text-xs text-gray-500">{label}</span>
+                <span className="text-xs text-[var(--text-muted)]">{label}</span>
             </div>
-            <p className="text-2xl font-bold text-gray-800">{value}</p>
-            <p className="text-xs text-gray-400">{percentage}% dari total</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">{value}</p>
+            <p className="text-xs text-[var(--text-muted)]">{percentage}% dari total</p>
         </div>
     );
 }
@@ -365,7 +299,7 @@ function QuickAction({
     return (
         <Link
             href={href}
-            className="flex flex-col items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors group"
+            className="flex flex-col items-center gap-3 p-4 rounded-xl bg-[var(--bg-hover)] hover:bg-[var(--bg-active)] transition-colors group"
         >
             <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center text-white transition-transform group-hover:scale-110"
@@ -373,7 +307,7 @@ function QuickAction({
             >
                 {icon}
             </div>
-            <span className="text-sm font-medium text-gray-700 text-center">{label}</span>
+            <span className="text-sm font-medium text-[var(--text-primary)] text-center">{label}</span>
         </Link>
     );
 }
@@ -396,13 +330,13 @@ function SessionCard({
     const percentage = Math.round((scanned / total) * 100);
 
     return (
-        <div className="p-4 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors">
+        <div className="p-4 rounded-xl border border-[var(--border-light)] hover:border-blue-500/50 transition-colors">
             <div className="flex items-start justify-between mb-3">
                 <div>
-                    <h3 className="font-medium text-gray-800">{title}</h3>
-                    <p className="text-xs text-gray-400">{date} • {time}</p>
+                    <h3 className="font-medium text-[var(--text-primary)]">{title}</h3>
+                    <p className="text-xs text-[var(--text-muted)]">{date} • {time}</p>
                 </div>
-                <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
+                <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${status === 'active' ? 'bg-green-500/20 text-green-500' : 'bg-[var(--bg-hover)] text-[var(--text-muted)]'
                     }`}>
                     {status === 'active' && <RefreshCw size={10} className="animate-spin" />}
                     {status === 'active' ? 'Aktif' : status === 'ended' ? 'Selesai' : 'Terjadwal'}
@@ -411,10 +345,10 @@ function SessionCard({
 
             <div className="mb-2">
                 <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-500">Progress</span>
-                    <span className="font-medium text-gray-800">{scanned}/{total}</span>
+                    <span className="text-[var(--text-muted)]">Progress</span>
+                    <span className="font-medium text-[var(--text-primary)]">{scanned}/{total}</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-[var(--bg-hover)] rounded-full overflow-hidden">
                     <div
                         className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
                         style={{ width: `${percentage}%` }}
@@ -424,7 +358,7 @@ function SessionCard({
 
             <Link
                 href="/absensi/session/1"
-                className="flex items-center justify-center gap-2 py-2 text-sm text-blue-600 hover:text-blue-700"
+                className="flex items-center justify-center gap-2 py-2 text-sm text-blue-500 hover:text-blue-600"
             >
                 <QrCode size={14} />
                 Lihat QR Code
@@ -451,18 +385,18 @@ function ClassAttendanceRow({
     const percentage = Math.round((hadir / total) * 100);
 
     return (
-        <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+        <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-colors">
             <div className="w-24">
-                <span className="text-sm font-medium text-gray-800">{className}</span>
+                <span className="text-sm font-medium text-[var(--text-primary)]">{className}</span>
             </div>
             <div className="flex-1 flex items-center gap-3">
-                <span className="text-xs px-2 py-0.5 bg-green-100 text-green-600 rounded">{hadir}H</span>
-                <span className="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded">{alpha}A</span>
-                <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-600 rounded">{izin}I</span>
-                <span className="text-xs px-2 py-0.5 bg-purple-100 text-purple-600 rounded">{sakit}S</span>
+                <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-500 rounded">{hadir}H</span>
+                <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-500 rounded">{alpha}A</span>
+                <span className="text-xs px-2 py-0.5 bg-amber-500/20 text-amber-500 rounded">{izin}I</span>
+                <span className="text-xs px-2 py-0.5 bg-purple-500/20 text-purple-500 rounded">{sakit}S</span>
             </div>
             <div className="text-right">
-                <span className={`text-sm font-semibold ${percentage >= 95 ? 'text-green-600' : percentage >= 90 ? 'text-amber-600' : 'text-red-600'
+                <span className={`text-sm font-semibold ${percentage >= 95 ? 'text-green-500' : percentage >= 90 ? 'text-amber-500' : 'text-red-500'
                     }`}>
                     {percentage}%
                 </span>
@@ -481,12 +415,12 @@ function AbsenteeItem({
     absences: number;
 }) {
     return (
-        <div className="flex items-center justify-between p-3 rounded-xl bg-red-50 border border-red-100">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-red-500/10 border border-red-500/20">
             <div>
-                <p className="text-sm font-medium text-gray-800">{name}</p>
-                <p className="text-xs text-gray-500">{className}</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">{name}</p>
+                <p className="text-xs text-[var(--text-muted)]">{className}</p>
             </div>
-            <span className="text-sm font-semibold text-red-600">{absences}x alpha</span>
+            <span className="text-sm font-semibold text-red-500">{absences}x alpha</span>
         </div>
     );
 }
@@ -503,16 +437,16 @@ function RecentScan({
     status: 'hadir' | 'terlambat';
 }) {
     return (
-        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${status === 'hadir' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'
+        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-colors">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${status === 'hadir' ? 'bg-green-500/20 text-green-500' : 'bg-amber-500/20 text-amber-500'
                 }`}>
                 {status === 'hadir' ? <CheckCircle size={16} /> : <Clock size={16} />}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 truncate">{name}</p>
-                <p className="text-xs text-gray-400">{className}</p>
+                <p className="text-sm text-[var(--text-primary)] truncate">{name}</p>
+                <p className="text-xs text-[var(--text-muted)]">{className}</p>
             </div>
-            <span className="text-xs text-gray-500">{time}</span>
+            <span className="text-xs text-[var(--text-muted)]">{time}</span>
         </div>
     );
 }
