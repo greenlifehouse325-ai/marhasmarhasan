@@ -24,6 +24,7 @@ import {
     Shield,
     UserCog,
     Database,
+    Layers,
     FileSearch,
     Server,
     ShieldAlert,
@@ -89,6 +90,7 @@ const SUPER_ADMIN_NAV: NavSection[] = [
         items: [
             { id: 'admins', label: 'Kelola Admin', icon: <UserCog size={20} />, href: '/super-admin/admins' },
             { id: 'users', label: 'Database User', icon: <Database size={20} />, href: '/super-admin/users' },
+            { id: 'data-master', label: 'Data Master', icon: <Layers size={20} />, href: '/data-master' },
         ],
     },
     {

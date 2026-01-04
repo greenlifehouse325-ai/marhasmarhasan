@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { Search, Plus, Clock, CheckCircle, XCircle, Eye } from 'lucide-react';
 import Link from 'next/link';
+import { Breadcrumb, SearchEmptyState } from '@/components/shared';
 
 const MOCK_DISPENSASI = [
     { id: 'D001', siswa: 'Ahmad Rizki', kelas: 'XII RPL 1', alasan: 'Lomba Olimpiade', tanggal: '2024-01-15', waktu: '08:00 - 12:00', status: 'approved' },
@@ -25,8 +26,23 @@ export default function DispensasiPage() {
         return matchesSearch && matchesStatus;
     });
 
+    const handleClearSearch = () => {
+        setSearchQuery('');
+        setStatusFilter('all');
+    };
+
     return (
         <div className="space-y-6 animate-fadeIn">
+            {/* Breadcrumb */}
+            <Breadcrumb
+                items={[
+                    { label: 'Absensi', href: '/absensi' },
+                    { label: 'Dispensasi' }
+                ]}
+                showHome
+                homeHref="/absensi"
+            />
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[var(--text-primary)]">Dispensasi</h1>
@@ -71,39 +87,46 @@ export default function DispensasiPage() {
             </div>
 
             <div className="bg-[var(--bg-card)] border border-[var(--border-light)] rounded-xl overflow-hidden">
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-[var(--bg-hover)] border-b border-[var(--border-light)]">
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Siswa</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Alasan</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Tanggal</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Waktu</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Status</th>
-                            <th className="px-4 py-3 text-center text-xs font-semibold text-[var(--text-muted)] uppercase">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[var(--border-light)]">
-                        {filtered.map(d => (
-                            <tr key={d.id} className="hover:bg-[var(--bg-hover)]">
-                                <td className="px-4 py-4">
-                                    <p className="font-medium text-[var(--text-primary)]">{d.siswa}</p>
-                                    <p className="text-xs text-[var(--text-muted)]">{d.kelas}</p>
-                                </td>
-                                <td className="px-4 py-4 text-sm text-[var(--text-secondary)]">{d.alasan}</td>
-                                <td className="px-4 py-4 text-sm text-[var(--text-secondary)]">{d.tanggal}</td>
-                                <td className="px-4 py-4 text-sm text-[var(--text-muted)]">{d.waktu}</td>
-                                <td className="px-4 py-4">
-                                    <span className={`px-2 py-1 text-xs rounded-lg ${d.status === 'approved' ? 'bg-green-500/10 text-green-600' : d.status === 'rejected' ? 'bg-red-500/10 text-red-500' : 'bg-amber-500/10 text-amber-600'}`}>
-                                        {d.status}
-                                    </span>
-                                </td>
-                                <td className="px-4 py-4 text-center">
-                                    <button className="p-2 hover:bg-[var(--bg-active)] rounded-lg"><Eye size={16} className="text-[var(--text-muted)]" /></button>
-                                </td>
+                {filtered.length === 0 ? (
+                    <SearchEmptyState
+                        searchQuery={searchQuery || (statusFilter !== 'all' ? statusFilter : '')}
+                        onClear={handleClearSearch}
+                    />
+                ) : (
+                    <table className="w-full">
+                        <thead>
+                            <tr className="bg-[var(--bg-hover)] border-b border-[var(--border-light)]">
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Siswa</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Alasan</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Tanggal</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Waktu</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase">Status</th>
+                                <th className="px-4 py-3 text-center text-xs font-semibold text-[var(--text-muted)] uppercase">Aksi</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-[var(--border-light)]">
+                            {filtered.map(d => (
+                                <tr key={d.id} className="hover:bg-[var(--bg-hover)]">
+                                    <td className="px-4 py-4">
+                                        <p className="font-medium text-[var(--text-primary)]">{d.siswa}</p>
+                                        <p className="text-xs text-[var(--text-muted)]">{d.kelas}</p>
+                                    </td>
+                                    <td className="px-4 py-4 text-sm text-[var(--text-secondary)]">{d.alasan}</td>
+                                    <td className="px-4 py-4 text-sm text-[var(--text-secondary)]">{d.tanggal}</td>
+                                    <td className="px-4 py-4 text-sm text-[var(--text-muted)]">{d.waktu}</td>
+                                    <td className="px-4 py-4">
+                                        <span className={`px-2 py-1 text-xs rounded-lg ${d.status === 'approved' ? 'bg-green-500/10 text-green-600' : d.status === 'rejected' ? 'bg-red-500/10 text-red-500' : 'bg-amber-500/10 text-amber-600'}`}>
+                                            {d.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-4 text-center">
+                                        <button className="p-2 hover:bg-[var(--bg-active)] rounded-lg"><Eye size={16} className="text-[var(--text-muted)]" /></button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </div>
     );

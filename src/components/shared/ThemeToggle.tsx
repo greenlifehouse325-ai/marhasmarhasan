@@ -13,6 +13,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 
 interface ThemeToggleProps {
     size?: 'sm' | 'md' | 'lg';
+    variant?: 'icon' | 'button' | 'dropdown';
     showLabel?: boolean;
     className?: string;
 }

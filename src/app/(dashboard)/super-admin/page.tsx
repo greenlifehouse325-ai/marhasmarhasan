@@ -3,7 +3,7 @@
  * SMK Marhas Admin Dashboard
  * 
  * Dashboard utama untuk Super Admin dengan overview sistem lengkap
- * Redesigned: neutral colors, larger text, proper hierarchy
+ * Redesigned with comprehensive menu navigation and cleaner layout
  */
 
 'use client';
@@ -28,16 +28,70 @@ import {
     Calendar,
     Smartphone,
     GraduationCap,
+    ChevronRight,
+    Settings,
+    FileText,
+    BarChart3,
+    Key,
+    History,
+    Users2,
+    Building,
+    Layers,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { getAccessibleModulesForSuperAdmin, getModuleStats } from '@/lib/moduleUtils';
+
+// ============================================
+// MENU DATA
+// ============================================
+const SUPER_ADMIN_MENUS = [
+    {
+        title: 'Manajemen Admin',
+        description: 'Kelola administrator sistem',
+        items: [
+            { label: 'Daftar Admin', href: '/super-admin/admins', icon: UserCog, color: '#7C3AED', description: 'Kelola admin sistem' },
+            { label: 'Audit Log', href: '/super-admin/audit-log', icon: History, color: '#3B82F6', description: 'Riwayat aktivitas admin' },
+            { label: 'Hak Akses', href: '/super-admin/roles', icon: Key, color: '#F59E0B', description: 'Kelola role & permissions' },
+        ]
+    },
+    {
+        title: 'Database Pengguna',
+        description: 'Kelola data siswa, guru, dan wali',
+        items: [
+            { label: 'Semua Pengguna', href: '/super-admin/users', icon: Users, color: '#10B981', description: 'Semua user dalam sistem' },
+            { label: 'Data Siswa', href: '/siswa', icon: GraduationCap, color: '#3B82F6', description: 'Kelola data siswa' },
+            { label: 'Data Guru', href: '/guru', icon: Users2, color: '#8B5CF6', description: 'Kelola data guru' },
+            { label: 'Data Orang Tua', href: '/orangtua', icon: Users, color: '#EC4899', description: 'Kelola data wali' },
+        ]
+    },
+    {
+        title: 'Sistem & Pengaturan',
+        description: 'Kontrol dan konfigurasi sistem',
+        items: [
+            { label: 'Kontrol Sistem', href: '/super-admin/system', icon: Server, color: '#10B981', description: 'Status & health sistem' },
+            { label: 'Keamanan', href: '/super-admin/security', icon: Shield, color: '#EF4444', description: 'Pengaturan keamanan' },
+            { label: 'Pengaturan', href: '/super-admin/settings', icon: Settings, color: '#64748B', description: 'Konfigurasi global' },
+            { label: 'Statistik', href: '/super-admin/analytics', icon: BarChart3, color: '#06B6D4', description: 'Analytics & laporan' },
+        ]
+    },
+    {
+        title: 'Data Master',
+        description: 'Data referensi sekolah',
+        items: [
+            { label: 'Data Master', href: '/data-master', icon: Database, color: '#3B82F6', description: 'Kelola data referensi' },
+            { label: 'Kelas', href: '/kelas', icon: Layers, color: '#8B5CF6', description: 'Manajemen kelas' },
+            { label: 'Jurusan & Mapel', href: '/data-master/jurusan', icon: Building, color: '#F59E0B', description: 'Jurusan & mata pelajaran' },
+        ]
+    },
+];
 
 export default function SuperAdminDashboard() {
     const { user } = useAuth();
 
     return (
         <div className="space-y-6 animate-fadeIn">
-            {/* Welcome Banner - Changed from purple to neutral/slate with key metrics */}
+            {/* Header Banner */}
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-800 via-slate-700 to-slate-600 p-6 md:p-8 text-white">
                 <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                     <div>
@@ -46,7 +100,7 @@ export default function SuperAdminDashboard() {
                             <span className="text-sm font-medium text-slate-300">Super Admin</span>
                         </div>
                         <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                            Selamat Datang, {user?.name?.split(' ')[0]}! 👋
+                            Selamat Datang, {user?.name?.split(' ')[0] || 'Admin'}!
                         </h1>
                         <p className="text-slate-300 max-w-xl">
                             Anda memiliki akses penuh ke seluruh sistem. Pantau aktivitas admin,
@@ -78,7 +132,7 @@ export default function SuperAdminDashboard() {
                 </div>
             </div>
 
-            {/* Quick Stats - Clickable Cards with Larger Text */}
+            {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <ClickableStatCard
                     label="Total Admin"
@@ -94,7 +148,7 @@ export default function SuperAdminDashboard() {
                     icon={<GraduationCap size={24} />}
                     color="#3B82F6"
                     trend="+23 bulan ini"
-                    href="/super-admin/users?tab=siswa"
+                    href="/siswa"
                 />
                 <ClickableStatCard
                     label="Total Guru"
@@ -102,7 +156,7 @@ export default function SuperAdminDashboard() {
                     icon={<Users size={24} />}
                     color="#10B981"
                     trend="+2 bulan ini"
-                    href="/super-admin/users?tab=guru"
+                    href="/guru"
                 />
                 <ClickableStatCard
                     label="Sistem Status"
@@ -114,14 +168,128 @@ export default function SuperAdminDashboard() {
                 />
             </div>
 
-            {/* Main Grid - Reorganized: Admin Status + Quick Actions at top */}
+            {/* Module Access Cards - Akses Cepat ke Modul */}
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)]">Akses Modul Admin</h2>
+                        <p className="text-sm text-[var(--text-muted)]">Masuk ke modul yang ingin dikelola</p>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    {getAccessibleModulesForSuperAdmin().map((module) => {
+                        const Icon = module.icon;
+                        const stats = getModuleStats(module.id);
+                        return (
+                            <Link
+                                key={module.id}
+                                href={module.basePath}
+                                className="group relative overflow-hidden bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border border-[var(--border-light)] hover:shadow-lg hover:border-transparent transition-all duration-300"
+                                style={{
+                                    '--hover-color': module.color,
+                                } as React.CSSProperties}
+                            >
+                                {/* Hover gradient overlay */}
+                                <div
+                                    className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+                                    style={{ background: `linear-gradient(135deg, ${module.color}, transparent)` }}
+                                />
+
+                                {/* Icon */}
+                                <div
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                                    style={{
+                                        backgroundColor: `${module.color}20`,
+                                        color: module.color
+                                    }}
+                                >
+                                    <Icon size={24} />
+                                </div>
+
+                                {/* Title & Description */}
+                                <h3 className="font-semibold text-[var(--text-primary)] mb-1 group-hover:text-[var(--hover-color)] transition-colors">
+                                    {module.name}
+                                </h3>
+                                <p className="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">
+                                    {module.description}
+                                </p>
+
+                                {/* Stats */}
+                                <div className="flex items-center gap-4 pt-3 border-t border-[var(--border-light)]">
+                                    <div>
+                                        <p className="text-lg font-bold" style={{ color: module.color }}>
+                                            {stats.primary.value}
+                                        </p>
+                                        <p className="text-xs text-[var(--text-muted)]">{stats.primary.label}</p>
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-semibold text-[var(--text-primary)]">
+                                            {stats.secondary.value}
+                                        </p>
+                                        <p className="text-xs text-[var(--text-muted)]">{stats.secondary.label}</p>
+                                    </div>
+                                </div>
+
+                                {/* Enter Button */}
+                                <div className="mt-4 flex items-center gap-1 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: module.color }}>
+                                    Masuk Modul <ArrowRight size={14} />
+                                </div>
+                            </Link>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Menu Navigation */}
+            <div className="space-y-4">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">Menu Super Admin</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {SUPER_ADMIN_MENUS.map((section, idx) => (
+                        <div
+                            key={idx}
+                            className="bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border border-[var(--border-light)] hover:shadow-md transition-shadow"
+                        >
+                            <div className="mb-4">
+                                <h3 className="text-base font-semibold text-[var(--text-primary)]">{section.title}</h3>
+                                <p className="text-xs text-[var(--text-muted)]">{section.description}</p>
+                            </div>
+                            <div className="space-y-2">
+                                {section.items.map((item, itemIdx) => {
+                                    const Icon = item.icon;
+                                    return (
+                                        <Link
+                                            key={itemIdx}
+                                            href={item.href}
+                                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-all group"
+                                        >
+                                            <div
+                                                className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+                                                style={{ backgroundColor: `${item.color}15`, color: item.color }}
+                                            >
+                                                <Icon size={20} />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-[var(--text-primary)]">{item.label}</p>
+                                                <p className="text-xs text-[var(--text-muted)] truncate">{item.description}</p>
+                                            </div>
+                                            <ChevronRight size={16} className="text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Main Grid - Admin Status & Quick Actions */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left: Admin Status Section - Made more prominent */}
+                {/* Left: Admin Status Section */}
                 <div className="lg:col-span-2">
                     <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
                             <div>
-                                <h2 className="text-xl font-bold text-[var(--text-primary)]">Sekilas Status Admin</h2>
+                                <h2 className="text-lg font-bold text-[var(--text-primary)]">Status Admin</h2>
                                 <p className="text-sm text-[var(--text-muted)]">Pantau aktivitas admin secara real-time</p>
                             </div>
                             <Link
@@ -177,43 +345,11 @@ export default function SuperAdminDashboard() {
                     </div>
                 </div>
 
-                {/* Right: Quick Actions + Alerts (Moved UP in hierarchy) */}
+                {/* Right: Alerts */}
                 <div className="space-y-6">
-                    {/* Quick Actions - Now at top of right column */}
+                    {/* System Alerts */}
                     <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
-                        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">⚡ Aksi Cepat</h2>
-
-                        <div className="space-y-2">
-                            <QuickActionButton
-                                label="Tambah Admin Baru"
-                                icon={<UserCog size={18} />}
-                                href="/super-admin/admins/create"
-                                color="#7C3AED"
-                            />
-                            <QuickActionButton
-                                label="Lihat Audit Log"
-                                icon={<Eye size={18} />}
-                                href="/super-admin/audit-log"
-                                color="#3B82F6"
-                            />
-                            <QuickActionButton
-                                label="Kontrol Sistem"
-                                icon={<Server size={18} />}
-                                href="/super-admin/system"
-                                color="#10B981"
-                            />
-                            <QuickActionButton
-                                label="Database User"
-                                icon={<Database size={18} />}
-                                href="/super-admin/users"
-                                color="#F59E0B"
-                            />
-                        </div>
-                    </div>
-
-                    {/* System Alerts - Improved colors */}
-                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
-                        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">🔔 Peringatan Sistem</h2>
+                        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Peringatan Sistem</h2>
 
                         <div className="space-y-3">
                             <AlertCard
@@ -237,61 +373,62 @@ export default function SuperAdminDashboard() {
                             />
                         </div>
                     </div>
+
+                    {/* System Health */}
+                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-bold text-[var(--text-primary)]">Kesehatan Sistem</h2>
+                            <Link href="/super-admin/system" className="text-xs text-[var(--brand-primary)]">
+                                Detail
+                            </Link>
+                        </div>
+
+                        <div className="space-y-4">
+                            <HealthBar label="CPU Usage" value={23} color="#10B981" />
+                            <HealthBar label="Memory" value={45} color="#3B82F6" />
+                            <HealthBar label="Storage" value={67} color="#F59E0B" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Bottom Row: Activity Log & System Health (Moved to bottom) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Recent Activity - Now at bottom */}
-                <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-lg font-bold text-[var(--text-primary)]">📋 Aktivitas Terbaru</h2>
-                        <Link
-                            href="/super-admin/audit-log"
-                            className="text-sm text-[var(--brand-primary)] hover:opacity-80 flex items-center gap-1 font-medium"
-                        >
-                            Audit Log <ArrowRight size={14} />
-                        </Link>
-                    </div>
-
-                    <div className="space-y-4">
-                        <ActivityItem
-                            action="Menambahkan buku baru"
-                            user="Admin Perpustakaan"
-                            time="2 menit lalu"
-                            type="create"
-                        />
-                        <ActivityItem
-                            action="Memverifikasi pembayaran SPP"
-                            user="Admin Keuangan"
-                            time="5 menit lalu"
-                            type="update"
-                        />
-                        <ActivityItem
-                            action="Membuat session absensi"
-                            user="Admin Absensi"
-                            time="15 menit lalu"
-                            type="create"
-                        />
-                        <ActivityItem
-                            action="Mengubah jadwal kelas XII PPLG 1"
-                            user="Admin Jadwal"
-                            time="2 jam lalu"
-                            type="update"
-                        />
-                    </div>
+            {/* Bottom Row: Activity Log */}
+            <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-bold text-[var(--text-primary)]">Aktivitas Terbaru</h2>
+                    <Link
+                        href="/super-admin/audit-log"
+                        className="text-sm text-[var(--brand-primary)] hover:opacity-80 flex items-center gap-1 font-medium"
+                    >
+                        Audit Log <ArrowRight size={14} />
+                    </Link>
                 </div>
 
-                {/* System Health - Now at bottom */}
-                <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
-                    <h2 className="text-lg font-bold text-[var(--text-primary)] mb-6">💻 Kesehatan Sistem</h2>
-
-                    <div className="space-y-4">
-                        <HealthBar label="CPU Usage" value={23} color="#10B981" />
-                        <HealthBar label="Memory" value={45} color="#3B82F6" />
-                        <HealthBar label="Storage" value={67} color="#F59E0B" />
-                        <HealthBar label="Database" value={12} color="#7C3AED" />
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <ActivityItem
+                        action="Menambahkan buku baru"
+                        user="Admin Perpustakaan"
+                        time="2 menit lalu"
+                        type="create"
+                    />
+                    <ActivityItem
+                        action="Memverifikasi pembayaran SPP"
+                        user="Admin Keuangan"
+                        time="5 menit lalu"
+                        type="update"
+                    />
+                    <ActivityItem
+                        action="Membuat session absensi"
+                        user="Admin Absensi"
+                        time="15 menit lalu"
+                        type="create"
+                    />
+                    <ActivityItem
+                        action="Mengubah jadwal kelas XII PPLG"
+                        user="Admin Jadwal"
+                        time="2 jam lalu"
+                        type="update"
+                    />
                 </div>
             </div>
         </div>
@@ -397,9 +534,9 @@ function ActivityItem({
     type: 'create' | 'update' | 'delete';
 }) {
     const colors = {
-        create: 'bg-green-100 text-green-600',
-        update: 'bg-blue-100 text-blue-600',
-        delete: 'bg-red-100 text-red-600',
+        create: 'bg-green-500/15 text-green-600',
+        update: 'bg-blue-500/15 text-blue-600',
+        delete: 'bg-red-500/15 text-red-600',
     };
 
     const icons = {
@@ -409,17 +546,17 @@ function ActivityItem({
     };
 
     return (
-        <div className="flex items-start gap-3 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-colors">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${colors[type]}`}>
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-[var(--bg-hover)]">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${colors[type]}`}>
                 {icons[type]}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm text-[var(--text-primary)]">{action}</p>
+                <p className="text-sm text-[var(--text-primary)] line-clamp-2">{action}</p>
                 <p className="text-xs text-[var(--text-muted)]">{user}</p>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
-                <Clock size={12} />
-                {time}
+                <div className="flex items-center gap-1 text-xs text-[var(--text-muted)] mt-1">
+                    <Clock size={10} />
+                    {time}
+                </div>
             </div>
         </div>
     );
@@ -439,10 +576,10 @@ function AlertCard({
     href?: string;
 }) {
     const styles = {
-        warning: 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30 text-amber-800 dark:text-amber-400',
-        info: 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-800 dark:text-blue-400',
-        success: 'bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/30 text-green-800 dark:text-green-400',
-        error: 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/30 text-red-800 dark:text-red-400',
+        warning: 'bg-amber-500/10 border-amber-500/30 text-amber-600',
+        info: 'bg-blue-500/10 border-blue-500/30 text-blue-600',
+        success: 'bg-green-500/10 border-green-500/30 text-green-600',
+        error: 'bg-red-500/10 border-red-500/30 text-red-600',
     };
 
     const icons = {
@@ -467,34 +604,6 @@ function AlertCard({
                 )}
             </div>
         </div>
-    );
-}
-
-function QuickActionButton({
-    label,
-    icon,
-    href,
-    color
-}: {
-    label: string;
-    icon: React.ReactNode;
-    href: string;
-    color: string;
-}) {
-    return (
-        <Link
-            href={href}
-            className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-colors group"
-        >
-            <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center text-white transition-transform group-hover:scale-110"
-                style={{ backgroundColor: color }}
-            >
-                {icon}
-            </div>
-            <span className="text-sm font-medium text-[var(--text-primary)]">{label}</span>
-            <ArrowRight size={14} className="ml-auto text-[var(--text-muted)] group-hover:text-[var(--text-primary)]" />
-        </Link>
     );
 }
 

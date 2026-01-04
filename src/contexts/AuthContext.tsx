@@ -1,6 +1,8 @@
 /**
  * Auth Context Provider
  * SMK Marhas Admin Dashboard
+ * 
+ * Frontend-Only Authentication dengan Session Management
  */
 
 'use client';
@@ -19,6 +21,12 @@ import type {
     AdminRole,
 } from '@/types/auth';
 import { ROLE_CONFIGS } from '@/types/admin';
+import {
+    saveSession,
+    loadSession,
+    validateSession,
+    clearSession,
+} from '@/lib/sessionUtils';
 
 // ============================================
 // INITIAL STATE
@@ -189,20 +197,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Check for existing session on mount
     useEffect(() => {
-        const checkSession = async () => {
+        const checkExistingSession = async () => {
             try {
-                const savedUser = localStorage.getItem('marhas_admin_user');
-                if (savedUser) {
-                    const user = JSON.parse(savedUser);
-                    dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+                // Validate session dengan encoding dan checksum
+                const sessionResult = validateSession();
+
+                if (sessionResult.isValid && sessionResult.session) {
+                    dispatch({ type: 'LOGIN_SUCCESS', payload: sessionResult.session.user });
                 } else {
-                    dispatch({ type: 'SET_LOADING', payload: false });
+                    // Try legacy localStorage (migration)
+                    const legacyUser = localStorage.getItem('marhas_admin_user');
+                    if (legacyUser) {
+                        try {
+                            const user = JSON.parse(legacyUser);
+                            // Migrate to new session format
+                            saveSession(user);
+                            // Clear legacy storage
+                            localStorage.removeItem('marhas_admin_user');
+                            dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+                        } catch {
+                            localStorage.removeItem('marhas_admin_user');
+                            dispatch({ type: 'SET_LOADING', payload: false });
+                        }
+                    } else {
+                        dispatch({ type: 'SET_LOADING', payload: false });
+                    }
                 }
             } catch {
+                clearSession();
                 dispatch({ type: 'SET_LOADING', payload: false });
             }
         };
-        checkSession();
+        checkExistingSession();
     }, []);
 
     // Login function
@@ -242,7 +268,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Success for regular admin
         const user = { ...mockUser.user, lastLoginAt: new Date() };
-        localStorage.setItem('marhas_admin_user', JSON.stringify(user));
+        // Save session dengan encoding dan checksum
+        saveSession(user);
         dispatch({ type: 'LOGIN_SUCCESS', payload: user });
 
         return { success: true, user };
@@ -264,7 +291,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const mockUser = MOCK_USERS[verification.email.toLowerCase()];
         if (mockUser) {
             const user = { ...mockUser.user, lastLoginAt: new Date() };
-            localStorage.setItem('marhas_admin_user', JSON.stringify(user));
+            // Save session dengan encoding dan checksum
+            saveSession(user);
             dispatch({ type: 'LOGIN_SUCCESS', payload: user });
             return { success: true, user };
         }
@@ -273,10 +301,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: 'Verifikasi gagal' };
     }, []);
 
-    // Logout function
+    // Logout function dengan enhanced security
     const logout = useCallback(async () => {
-        localStorage.removeItem('marhas_admin_user');
+        // Clear all session data
+        clearSession();
+        sessionStorage.clear();
+        localStorage.removeItem('marhas_admin_user'); // Legacy cleanup
+
         dispatch({ type: 'LOGOUT' });
+
+        // Block browser back navigation setelah logout
+        window.history.replaceState(null, '', '/login');
+
+        // Force redirect ke login
+        if (typeof window !== 'undefined') {
+            window.location.replace('/login');
+        }
     }, []);
 
     // Refresh session

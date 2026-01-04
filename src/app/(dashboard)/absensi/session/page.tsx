@@ -3,6 +3,7 @@
  * SMK Marhas Admin Dashboard - Absensi
  * 
  * Halaman untuk mengelola session absensi dan QR code
+ * FIXED: Theme-aware breadcrumb
  */
 
 'use client';
@@ -26,6 +27,7 @@ import {
 } from 'lucide-react';
 import { MOCK_SESSIONS, getActiveSessions, getScheduledSessions } from '@/data/mock-attendance';
 import type { AttendanceSession } from '@/types/absensi';
+import { Breadcrumb } from '@/components/shared';
 
 export default function SessionPage() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -43,20 +45,26 @@ export default function SessionPage() {
 
     return (
         <div className="space-y-6 animate-fadeIn">
+            {/* Breadcrumb */}
+            <Breadcrumb
+                items={[
+                    { label: 'Absensi', href: '/absensi' },
+                    { label: 'Session QR' }
+                ]}
+                showHome
+                homeHref="/absensi"
+            />
+
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-                        <Link href="/absensi" className="hover:text-blue-600">Dashboard</Link>
-                        <span>/</span>
-                        <span>Session QR</span>
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-800">Session Absensi</h1>
+                    <h1 className="text-2xl font-bold text-[var(--text-primary)]">Session Absensi</h1>
+                    <p className="text-[var(--text-muted)]">Kelola session absensi dan QR code</p>
                 </div>
 
                 <Link
                     href="/absensi/session/create"
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[var(--brand-primary)] rounded-xl hover:bg-[var(--brand-secondary)] transition-colors"
                 >
                     <Plus size={16} />
                     Buat Session
@@ -109,8 +117,8 @@ export default function SessionPage() {
                         <button
                             onClick={() => setSelectedTab('active')}
                             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === 'active'
-                                    ? 'bg-white text-blue-600 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             <Play size={14} />
@@ -119,8 +127,8 @@ export default function SessionPage() {
                         <button
                             onClick={() => setSelectedTab('scheduled')}
                             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === 'scheduled'
-                                    ? 'bg-white text-blue-600 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             <Clock size={14} />
@@ -129,8 +137,8 @@ export default function SessionPage() {
                         <button
                             onClick={() => setSelectedTab('ended')}
                             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === 'ended'
-                                    ? 'bg-white text-blue-600 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             <CheckCircle size={14} />

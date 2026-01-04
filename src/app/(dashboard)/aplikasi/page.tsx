@@ -3,7 +3,7 @@
  * SMK Marhas Admin Dashboard
  * 
  * Dashboard untuk Admin Aplikasi dengan overview konten dan moderasi
- * THEME-AWARE VERSION
+ * Redesigned with better menu layout
  */
 
 'use client';
@@ -20,23 +20,66 @@ import {
     ArrowRight,
     Plus,
     Eye,
-    TrendingUp,
     AlertTriangle,
     Send,
+    Settings,
+    Image,
+    ChevronRight,
 } from 'lucide-react';
 import Link from 'next/link';
+
+// ============================================
+// MENU DATA - Reordered: Konten, Moderasi (left) | Notifikasi, Pengaturan (right)
+// ============================================
+const APLIKASI_MENUS_ROW1 = [
+    {
+        title: 'Konten',
+        description: 'Kelola konten aplikasi',
+        items: [
+            { label: 'Pengumuman', href: '/aplikasi/pengumuman', icon: Megaphone, color: '#6366F1', description: 'Buat & kelola pengumuman' },
+            { label: 'Berita Sekolah', href: '/aplikasi/berita', icon: Newspaper, color: '#10B981', description: 'Berita & artikel sekolah' },
+            { label: 'Prestasi', href: '/aplikasi/prestasi', icon: Trophy, color: '#F59E0B', description: 'Catat prestasi siswa' },
+            { label: 'Banner', href: '/aplikasi/banner', icon: Image, color: '#EC4899', description: 'Kelola banner aplikasi' },
+        ]
+    },
+    {
+        title: 'Moderasi',
+        description: 'Moderasi konten pengguna',
+        items: [
+            { label: 'Laporan User', href: '/aplikasi/moderasi', icon: Flag, color: '#EF4444', description: 'Review laporan pengguna' },
+            { label: 'Bug Reports', href: '/aplikasi/bug-reports', icon: Bug, color: '#F59E0B', description: 'Kelola laporan bug' },
+        ]
+    },
+];
+
+const APLIKASI_MENUS_ROW2 = [
+    {
+        title: 'Notifikasi',
+        description: 'Push notification ke pengguna',
+        items: [
+            { label: 'Push Notifikasi', href: '/aplikasi/notifikasi', icon: Bell, color: '#3B82F6', description: 'Kirim notifikasi ke user' },
+        ]
+    },
+    {
+        title: 'Pengaturan',
+        description: 'Konfigurasi aplikasi',
+        items: [
+            { label: 'Pengaturan Aplikasi', href: '/aplikasi/settings', icon: Settings, color: '#64748B', description: 'Konfigurasi sistem aplikasi' },
+        ]
+    },
+];
 
 export default function AplikasiDashboard() {
     return (
         <div className="space-y-6 animate-fadeIn">
-            {/* Welcome Banner */}
+            {/* Header */}
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 p-6 md:p-8 text-white">
                 <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-2">
                         <Smartphone size={20} />
                         <span className="text-sm font-medium text-indigo-200">Admin Aplikasi</span>
                     </div>
-                    <h1 className="text-2xl md:text-3xl font-bold mb-2">Dashboard Aplikasi 📱</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold mb-2">Dashboard Aplikasi</h1>
                     <p className="text-indigo-200 max-w-xl">
                         Kelola konten aplikasi Marhas Connect, push notifikasi, dan moderasi laporan pengguna.
                     </p>
@@ -55,21 +98,40 @@ export default function AplikasiDashboard() {
                 <StatCard label="Bug Reports" value="3" icon={<Bug size={20} />} color="#F59E0B" subtext="Belum ditangani" />
             </div>
 
-            {/* Main Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column */}
-                <div className="lg:col-span-2 space-y-6">
-                    {/* Quick Actions */}
-                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
-                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Aksi Cepat</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <QuickAction label="Buat Pengumuman" icon={<Megaphone size={20} />} color="#6366F1" href="/aplikasi/pengumuman/create" />
-                            <QuickAction label="Kirim Notifikasi" icon={<Send size={20} />} color="#3B82F6" href="/aplikasi/notifikasi/compose" />
-                            <QuickAction label="Tambah Berita" icon={<Plus size={20} />} color="#10B981" href="/aplikasi/berita/create" />
-                            <QuickAction label="Catat Prestasi" icon={<Trophy size={20} />} color="#F59E0B" href="/aplikasi/prestasi/create" />
-                        </div>
-                    </div>
+            {/* Quick Actions */}
+            <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Aksi Cepat</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <QuickAction label="Buat Pengumuman" icon={<Megaphone size={20} />} color="#6366F1" href="/aplikasi/pengumuman/create" />
+                    <QuickAction label="Tambah Berita" icon={<Plus size={20} />} color="#10B981" href="/aplikasi/berita/create" />
+                    <QuickAction label="Kirim Notifikasi" icon={<Send size={20} />} color="#3B82F6" href="/aplikasi/notifikasi" />
+                    <QuickAction label="Kelola Banner" icon={<Image size={20} />} color="#EC4899" href="/aplikasi/banner" />
+                </div>
+            </div>
 
+            {/* Menu Navigation - Row 1: Konten & Moderasi */}
+            <div className="space-y-4">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">Menu Aplikasi</h2>
+
+                {/* Row 1 */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {APLIKASI_MENUS_ROW1.map((section, idx) => (
+                        <MenuCard key={idx} section={section} />
+                    ))}
+                </div>
+
+                {/* Row 2 */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {APLIKASI_MENUS_ROW2.map((section, idx) => (
+                        <MenuCard key={idx} section={section} />
+                    ))}
+                </div>
+            </div>
+
+            {/* Main Grid - Statistics & Recent Content */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Left Column - Statistics & Content */}
+                <div className="lg:col-span-2 space-y-6">
                     {/* App Statistics */}
                     <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
                         <div className="flex items-center justify-between mb-6">
@@ -106,10 +168,10 @@ export default function AplikasiDashboard() {
                         </div>
 
                         <div className="space-y-3">
-                            <ContentItem type="announcement" title="Jadwal UAS Semester Ganjil 2024" date="29 Des 2024" views={1250} status="published" />
-                            <ContentItem type="news" title="SMK Marhas Juara 1 LKS Tingkat Provinsi" date="28 Des 2024" views={890} status="published" />
-                            <ContentItem type="announcement" title="Libur Tahun Baru 2025" date="27 Des 2024" views={2100} status="published" />
-                            <ContentItem type="achievement" title="Prestasi Tim Robotik PPLG" date="26 Des 2024" views={456} status="draft" />
+                            <ContentItem type="announcement" title="Jadwal UAS Semester Ganjil 2025" date="02 Jan 2026" views={1250} status="published" />
+                            <ContentItem type="news" title="SMK Marhas Juara 1 LKS Tingkat Provinsi" date="01 Jan 2026" views={890} status="published" />
+                            <ContentItem type="announcement" title="Libur Tahun Baru 2026" date="31 Des 2025" views={2100} status="published" />
+                            <ContentItem type="achievement" title="Prestasi Tim Robotik PPLG" date="30 Des 2025" views={456} status="draft" />
                         </div>
 
                         <Link href="/aplikasi/pengumuman" className="mt-4 flex items-center justify-center gap-2 py-2 text-sm text-indigo-500 hover:text-indigo-600 hover:bg-indigo-500/10 rounded-lg transition-colors">
@@ -118,7 +180,7 @@ export default function AplikasiDashboard() {
                     </div>
                 </div>
 
-                {/* Right Column */}
+                {/* Right Column - Moderation & Notifications */}
                 <div className="space-y-6">
                     {/* Moderation Queue */}
                     <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
@@ -169,15 +231,6 @@ export default function AplikasiDashboard() {
                             Lihat Semua <ArrowRight size={14} />
                         </Link>
                     </div>
-
-                    {/* Recent Achievements */}
-                    <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-light)]">
-                        <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Prestasi Terbaru</h2>
-                        <div className="space-y-3">
-                            <AchievementItem title="Juara 1 LKS Provinsi" student="Tim PPLG" category="Lomba" date="28 Des 2024" />
-                            <AchievementItem title="Finalis Olimpiade IT" student="Ahmad Rizky" category="Akademik" date="25 Des 2024" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -185,8 +238,43 @@ export default function AplikasiDashboard() {
 }
 
 // ============================================
-// SUB-COMPONENTS (THEME-AWARE)
+// SUB-COMPONENTS
 // ============================================
+
+function MenuCard({ section }: { section: { title: string; description: string; items: { label: string; href: string; icon: React.ComponentType<{ size?: number }>; color: string; description: string }[] } }) {
+    return (
+        <div className="bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border border-[var(--border-light)] hover:shadow-md transition-shadow">
+            <div className="mb-4">
+                <h3 className="text-base font-semibold text-[var(--text-primary)]">{section.title}</h3>
+                <p className="text-xs text-[var(--text-muted)]">{section.description}</p>
+            </div>
+            <div className="space-y-2">
+                {section.items.map((item, itemIdx) => {
+                    const Icon = item.icon;
+                    return (
+                        <Link
+                            key={itemIdx}
+                            href={item.href}
+                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--bg-hover)] transition-all group"
+                        >
+                            <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+                                style={{ backgroundColor: `${item.color}15`, color: item.color }}
+                            >
+                                <Icon size={20} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-[var(--text-primary)]">{item.label}</p>
+                                <p className="text-xs text-[var(--text-muted)] truncate">{item.description}</p>
+                            </div>
+                            <ChevronRight size={16} className="text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
 
 function StatCard({ label, value, icon, color, subtext, urgent = false }: { label: string; value: string; icon: React.ReactNode; color: string; subtext: string; urgent?: boolean; }) {
     return (
@@ -287,19 +375,6 @@ function BugItem({ title, reporter, priority, time }: { title: string; reporter:
                 <p className="text-xs text-[var(--text-muted)]">{reporter} • {time}</p>
             </div>
             <span className={`text-xs px-2 py-0.5 rounded-full ${priorityColors[priority]}`}>{priorityLabels[priority]}</span>
-        </div>
-    );
-}
-
-function AchievementItem({ title, student, category, date }: { title: string; student: string; category: string; date: string; }) {
-    return (
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-            <Trophy size={18} className="text-amber-500" />
-            <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[var(--text-primary)] truncate">{title}</p>
-                <p className="text-xs text-[var(--text-muted)]">{student} • {category}</p>
-            </div>
-            <span className="text-xs text-[var(--text-muted)]">{date}</span>
         </div>
     );
 }

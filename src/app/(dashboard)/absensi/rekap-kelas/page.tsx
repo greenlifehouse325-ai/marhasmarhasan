@@ -148,10 +148,14 @@ export default function RekapKelasPage() {
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {filteredClasses.map(cls => (
-                                <tr key={cls.id} className="hover:bg-gray-50 transition-colors">
+                                <tr
+                                    key={cls.id}
+                                    className="hover:bg-blue-50 transition-colors cursor-pointer group"
+                                    onClick={() => window.location.href = `/absensi/rekap-kelas/${cls.id}`}
+                                >
                                     <td className="px-6 py-4">
                                         <div>
-                                            <p className="text-sm font-medium text-gray-800">{cls.name}</p>
+                                            <p className="text-sm font-medium text-gray-800 group-hover:text-blue-600">{cls.name}</p>
                                             <p className="text-xs text-gray-500">Kampus {cls.campus} • {cls.major}</p>
                                         </div>
                                     </td>
@@ -180,13 +184,13 @@ export default function RekapKelasPage() {
                                             <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
                                                 <div
                                                     className={`h-full rounded-full ${cls.percentage >= 90 ? 'bg-green-500' :
-                                                            cls.percentage >= 80 ? 'bg-amber-500' : 'bg-red-500'
+                                                        cls.percentage >= 80 ? 'bg-amber-500' : 'bg-red-500'
                                                         }`}
                                                     style={{ width: `${cls.percentage}%` }}
                                                 />
                                             </div>
                                             <span className={`text-sm font-medium ${cls.percentage >= 90 ? 'text-green-600' :
-                                                    cls.percentage >= 80 ? 'text-amber-600' : 'text-red-600'
+                                                cls.percentage >= 80 ? 'text-amber-600' : 'text-red-600'
                                                 }`}>
                                                 {cls.percentage}%
                                             </span>

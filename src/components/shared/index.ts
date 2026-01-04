@@ -42,6 +42,10 @@ export { default as ThemeToggle } from './ThemeToggle';
 // Layout
 export { PageHeader } from './PageHeader';
 export { DrawerPanel } from './DrawerPanel';
+export { BackButton } from './BackButton';
+export { EmptyState, SearchEmptyState, TableEmptyState } from './EmptyState';
+export { Breadcrumb, createBreadcrumbFromPath, DEFAULT_PATH_LABELS } from './Breadcrumb';
+export type { BreadcrumbItem } from './Breadcrumb';
 
 // Form
 export { FileUpload } from './FileUpload';
@@ -49,3 +53,20 @@ export { FileUpload } from './FileUpload';
 // Notifications
 export { ToastProvider, useToast } from './Toast';
 export { AlertBanner } from './AlertBanner';
+
+// Loading States
+export {
+    Skeleton,
+    SkeletonText,
+    SkeletonAvatar,
+    SkeletonCard,
+    SkeletonStat,
+    SkeletonTableRow,
+    SkeletonTable,
+    SkeletonChart,
+    SkeletonPageHeader,
+    SkeletonDashboard
+} from './Skeleton';
+
+// Placeholder
+export { ComingSoon } from './ComingSoon';
